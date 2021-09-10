@@ -6,7 +6,7 @@
 <configuration>
 	<typeAliases>
 
+		<typeAlias alias="member" type="com.kitri.sns.login.vo.MemberVO"/>
 	</typeAliases>
-	
-	
+
 </configuration>
