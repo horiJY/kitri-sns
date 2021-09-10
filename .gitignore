@@ -68,6 +68,9 @@ local.properties
 # Spring Boot Tooling
 .sts4-cache/
 
+###Eclipse TomcatBuild###
+target/
+
 ### Java ###
 # Compiled class file
 *.class
