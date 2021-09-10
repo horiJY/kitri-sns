@@ -4,8 +4,8 @@
 
 ### Eclipse ###
 .metadata
-bin/
-tmp/
+*/bin/
+*/tmp/
 *.tmp
 *.bak
 *.swp
@@ -69,7 +69,7 @@ local.properties
 .sts4-cache/
 
 ###Eclipse TomcatBuild###
-target/
+*/target/
 
 ### Java ###
 # Compiled class file
