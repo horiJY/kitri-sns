@@ -43,8 +43,8 @@
 		<beans:property name="dataSource" ref="dataSource" />
 		<!-- 		<beans:property name="configLocation" value="classpath:mybatis/config/mybatis-config.xml" /> -->
 		<!-- value ="" 안에 classpath:로 넣으면src/main/resources까지가 프로젝트 buildpath로 잡혀있기 때문에 찾아갈 수 있다.  -->
-		<beans:property name="configLocation" value="/resources/mybatis/config/mybatis-config.xml" />
-		<beans:property name="mapperLocations"	value="/resources/mybatis/mapper/*-mapper.xml" />
+		<beans:property name="configLocation" value="classpath:mybatis/config/mybatis-config.xml" />
+		<beans:property name="mapperLocations"	value="classpath:mybatis/mapper/*-mapper.xml" />
 	</beans:bean>
 
 	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
