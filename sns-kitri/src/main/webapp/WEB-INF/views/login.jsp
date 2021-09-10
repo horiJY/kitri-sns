@@ -83,7 +83,6 @@ $(document).ready(function(){
 			console.log(data);
 				if(data){
 					$("#signupForm").submit();
-					console.log("1111111111111");
 				} else {
 					$("#idcheckMsg").css("color","red");
 					$("#idcheckMsg").text("아이디가 존재합니다");		
@@ -145,7 +144,7 @@ $(document).ready(function(){
 			</div>
 			<div id="join" class="form_field">
 				<form action="${path }/login/signup-regist" id="signupForm" method="POST" class="form join">
-					<input type="hidden" id="thumnail" name="thumnail" value="${path }/image/members/' + id + '/thumnail.jpg">
+					<input type="hidden" id="thumnail" name="thumnail" value="/image/members/thumnail.jpg">
 					<input type="hidden" id="introduce" name="introduce" value="">
 					<div id="signinclick" class="change">
 						<span class="or">or</span>
