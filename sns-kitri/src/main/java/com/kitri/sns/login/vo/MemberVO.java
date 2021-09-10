@@ -8,15 +8,8 @@ public class MemberVO {
 	private String age;
 	private int follower;
 	private int following;
-	private String thumnail;
 	private String introduce;
 	
-	public String getThumnail() {
-		return thumnail;
-	}
-	public void setThumnail(String thumnail) {
-		this.thumnail = thumnail;
-	}
 	public String getIntroduce() {
 		return introduce;
 	}
