@@ -18,7 +18,9 @@ public class FeedController {
 	
 	@GetMapping("")
 	public String feedboard() {
-			
+		//session.id 없으면 login페이지로 이동
+		
+		//로그인 후 피드 가져오기
 		return "feedboard";
 	}
 }
