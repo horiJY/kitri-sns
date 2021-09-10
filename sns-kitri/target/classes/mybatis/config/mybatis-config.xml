@@ -5,6 +5,8 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
+
 		<typeAlias alias="member" type="com.kitri.sns.login.vo.MemberVO"/>
 	</typeAliases>
+
 </configuration>
