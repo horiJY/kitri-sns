@@ -108,11 +108,6 @@ public class DMHandler extends TextWebSocketHandler {
 		session.sendMessage(new TextMessage(gson.toJson(msgDetail)));
 	}
 	
-	private String format1(Date today) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		// 전송버튼 클릭 or 엔터 입력 시 쓰여져 있는 내용 json으로 path의 파일에 저장 및 화면에 보여주기
@@ -122,5 +117,10 @@ public class DMHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		//연결 끊기
+	}
+	
+	private String format1(Date today) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

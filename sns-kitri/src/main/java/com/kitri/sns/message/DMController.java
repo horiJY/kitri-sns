@@ -16,12 +16,11 @@ public class DMController {
 	
 	//dmboard
 	@RequestMapping("/list")
-	public String DMList(Model model, String senderId) {
-		senderId = "";
+	public String DMList() {
+		
 		
 		//접속중인 아이디 받아서 
-		List<MessageVO> msgList = msgService.getMessageList(senderId);
-		model.addAttribute("msgList", msgList);
+		
 		return "dmboard";
 	}
 	

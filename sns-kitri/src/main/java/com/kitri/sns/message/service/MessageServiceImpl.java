@@ -4,10 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.kitri.sns.message.dao.MessageDAO;
 import com.kitri.sns.message.vo.MessageVO;
 
+@Service
 public class MessageServiceImpl implements MessageService{
+	
 	@Autowired
 	private MessageDAO messageDAO;
 	
