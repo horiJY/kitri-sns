@@ -1,7 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mybatis.mapper.feed-mapper">
+<mapper namespace="feed">
+	<resultMap type="com.kitri.sns.feed.vo.FeedVO" id="FeedMap">
+		<result property="feedId" column="feed_id" />
+		<result property="memberId" column="member_id" />
+		<result property="imageURL" column="image_URL" />
+		<result property="content" column="content" />
+		<result property="regdate" column="regdate" />
+		<result property="likes" column="likes" />
+	</resultMap>
 
+	<select id="selectFollowingNum" resultType="int">
+		select following_num 
+		from members 
+		where member_id = ${id};
+	</select>
 
-
+	<select id="selectFollowingFeed" resultType="feedVO">
+		select *
+		from (  select rownum RNUM, A.*
+				from( select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+                        from post_feeds 
+                        where member_id in (select follow_id 
+                                            from member_follow
+                                            where member_id = 'okh970526' )
+                        and REG_DATE >= sysdate-3
+                    ) A
+            )B
+where B.RNUM BETWEEN ${start} AND ${end};
+	</select>
+	
+	<select id="selectRandomFeed" resultType="feedVO">
+		select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+		from post_feeds 
+		where reg_date >= sysdate-3 
+		order by likes DESC;
+	</select>
+	
+	
 </mapper>
