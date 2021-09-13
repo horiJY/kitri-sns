@@ -21,7 +21,7 @@ public class MessageServiceImpl implements MessageService{
 	}
 
 	@Override
-	public List<MessageVO> getMessageDetail(Map<String, String> map) {
+	public List<MessageVO> getMessageDetail(Map<String, Object> map) {
 		return messageDAO.selectMsgDetail(map);
 	}
 

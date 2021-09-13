@@ -20,7 +20,7 @@ public class MessageDAOImpl implements MessageDAO{
 	}
 
 	@Override
-	public List<MessageVO> selectMsgDetail(Map<String, String> map) {
+	public List<MessageVO> selectMsgDetail(Map<String, Object> map) {
 		return sqlSession.selectList("dm.selectMsgDetail", map);
 	}
 

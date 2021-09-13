@@ -12,9 +12,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -26,6 +28,7 @@ import com.kitri.sns.message.service.MessageService;
 import com.kitri.sns.message.vo.MessageDetailVO;
 import com.kitri.sns.message.vo.MessageVO;
 
+@RequestMapping("/detail")
 public class DMHandler extends TextWebSocketHandler {
 	@Autowired
 	private MessageService msgService;
@@ -38,11 +41,21 @@ public class DMHandler extends TextWebSocketHandler {
 		// 아이디 두 개 값 받아서 db에 이전 대화기록 있을 시 가장 최근 3개의 path의 파일 가져오기
 		// path : file : json : 값 dmboard.jsp 전송
 		
+		Map<String, Object> map;
+		map = session.getAttributes();
+
 		Map<String, Object> sessionMap = new HashMap<String, Object>();
-		Map<String, String> map = new HashMap<String, String>();
 		
-		String senderId = "";
-		String receiverId = "";
+		
+		String senderId = (String) map.get("senderId");
+		String receiverId = (String) map.get("receiverId");
+		String context = (String)map.get("path");
+		SimpleDateFormat format1 = new SimpleDateFormat ("yyyyMMdd");
+		Date today = new Date();
+		String tdy = format1(today);
+		
+		String path1 = context + senderId + "_" + receiverId + "_" + tdy;
+		String path2 = context + receiverId + "_" + senderId + "_" + tdy;
 		
 		sessionMap.put("senderId", senderId);
 		sessionMap.put("receiverId", receiverId);
@@ -54,14 +67,10 @@ public class DMHandler extends TextWebSocketHandler {
 		
 		List<MessageVO> msgList = msgService.getMessageDetail(map);
 		
-		SimpleDateFormat format1 = new SimpleDateFormat ("yyyyMMdd");
-		Date today = new Date();
-		String tdy = format1(today);
+		//파일 경로 : C://..... + path1으로 변경하기
 		
-		String path = senderId + "_" + receiverId + "_" + tdy;
-		String path2 = receiverId + "_" + senderId + "_" + tdy;
 		
-		File file = new File(path);
+		File file = new File(path1);
 		File file2 = new File(path2);
 		int insertResult = 0;
 		
@@ -71,13 +80,15 @@ public class DMHandler extends TextWebSocketHandler {
 			MessageVO mvo = new MessageVO();
 			mvo.setId1(senderId);
 			mvo.setId2(receiverId);
-			mvo.setPath(path);
+			mvo.setPath(path1);
 			mvo.setLastMsg(lastMsg);
 			insertResult = msgService.insertMessage(mvo);
 			
-			if(insertResult != 0) {
+			if(insertResult != 0) { 
 				file.createNewFile();
 			}
+		}else {
+			path1 = msgList.get(0).getPath();
 		}
 		List<MessageDetailVO> msgDetail = new ArrayList<MessageDetailVO>();
 		JsonParser parser = new JsonParser();
@@ -112,11 +123,37 @@ public class DMHandler extends TextWebSocketHandler {
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		// 전송버튼 클릭 or 엔터 입력 시 쓰여져 있는 내용 json으로 path의 파일에 저장 및 화면에 보여주기
 		// path : file : json : 저장
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		Map<String, String> mapReceive = objectMapper.readValue(message.getPayload(), Map.class);
+		
+		String senderId = mapReceive.get("senderId");
+		String receiverId = mapReceive.get("receiverId");
+		String msg = mapReceive.get("msg");
+		String path = mapReceive.get("path");
+		
+		SimpleDateFormat format1 = new SimpleDateFormat ("yyyyMMdd");
+		Date today = new Date();
+
+		JSONObject obj = new JSONObject();
+		obj.put("sender", senderId);
+		obj.put("receiver", receiverId); 
+		obj.put("time", today);
+		obj.put("msg", msg);
+		try { 
+			FileWriter file = new FileWriter(path); 
+			file.write(obj.toJSONString()); 
+			file.flush(); 
+			file.close(); 
+		} catch (IOException e) {
+				e.printStackTrace(); 
+		}
+
 	}
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-		//연결 끊기
+		sessionList.remove(session);
 	}
 	
 	private String format1(Date today) {
