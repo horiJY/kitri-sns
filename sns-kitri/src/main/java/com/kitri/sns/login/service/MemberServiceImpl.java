@@ -1,5 +1,7 @@
 package com.kitri.sns.login.service;
 
+import java.security.MessageDigest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +51,28 @@ public class MemberServiceImpl implements MemberService{
 		}
 		
 		return regstCheckFlag;
+	}
+
+	@Override
+	public String sha256(String pw) {
+		try{
+
+			MessageDigest digest = MessageDigest.getInstance("SHA-256");
+			byte[] hash = digest.digest(pw.getBytes("UTF-8"));
+			StringBuffer hexString = new StringBuffer();
+
+			for (int i = 0; i < hash.length; i++) {
+				String hex = Integer.toHexString(0xff & hash[i]);
+				if(hex.length() == 1) hexString.append('0');
+				hexString.append(hex);
+			}
+
+			//출력
+			return hexString.toString();
+			
+		} catch(Exception ex){
+			throw new RuntimeException(ex);
+		}
 	}
 	
 }

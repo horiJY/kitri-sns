@@ -28,6 +28,7 @@ public class LoginController {
 	@RequestMapping("/logincheck")
 	@ResponseBody
 	public boolean logincheck(MemberVO mvo, HttpSession session) {
+		mvo.setPw(memberService.sha256(mvo.getPw()));
 		boolean loginFlag = memberService.loginCheckMember(mvo);
 		
 		if(loginFlag) {
@@ -49,6 +50,7 @@ public class LoginController {
 	@RequestMapping("/signup-regist")
 	public String signupRegist(MemberVO mvo) {
 		
+		mvo.setPw(memberService.sha256(mvo.getPw()));
 		memberService.registMember(mvo);
 		
 		return "redirect:/login";
