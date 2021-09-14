@@ -4,7 +4,7 @@
 	<resultMap type="com.kitri.sns.feed.vo.FeedVO" id="FeedMap">
 		<result property="feedId" column="feed_id" />
 		<result property="memberId" column="member_id" />
-		<result property="imageURL" column="image_URL" />
+		<result property="imageURL" column="IMAGE_URL" />
 		<result property="content" column="content" />
 		<result property="regdate" column="reg_date" />
 		<result property="likes" column="likes" />
@@ -18,9 +18,9 @@
 
 	<select id="selectFollowingFeeds" resultMap="FeedMap">
 	<![CDATA[                                            
-		select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
-		from (  select rownum RNUM, FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
-				from( select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+		select FEED_ID, MEMBER_ID, "IMAGE_URL", CONTENT, REG_DATE, LIKES
+		from (  select rownum RNUM, FEED_ID, MEMBER_ID, "IMAGE_URL", CONTENT, REG_DATE, LIKES
+				from( select FEED_ID, MEMBER_ID, JSON_query(image_url,'$.images' ) as "IMAGE_URL", CONTENT, REG_DATE, LIKES
                         from post_feeds 
                         where member_id in (select follow_id 
                                             from member_follow
@@ -35,9 +35,9 @@
 	
 	<select id="selectFollowingMoreFeeds" resultMap="FeedMap">
 	<![CDATA[
-		select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
-			from (  select rownum RNUM, FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
-					from( select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+		select FEED_ID, MEMBER_ID, "IMAGE_URL", CONTENT, REG_DATE, LIKES
+			from (  select rownum RNUM, FEED_ID, MEMBER_ID, "IMAGE_URL", CONTENT, REG_DATE, LIKES
+					from( select FEED_ID, MEMBER_ID, JSON_query(image_url,'$.images') as "IMAGE_URL", CONTENT, REG_DATE, LIKES
 	                        from post_feeds 
 	                        where member_id in (select A.follow_id
 	                                            from (select count(*),follow_id from member_follow
@@ -56,13 +56,13 @@
 	
 	<select id="selectRandomFeeds" resultMap="FeedMap">
 	<![CDATA[
-		select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
-		from (  select rownum RNUM, FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
-				from( select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+		select FEED_ID, MEMBER_ID, "IMAGE_URL", CONTENT, REG_DATE, LIKES
+		from (  select rownum RNUM, FEED_ID, MEMBER_ID, "IMAGE_URL", CONTENT, REG_DATE, LIKES
+				from( select FEED_ID, MEMBER_ID, JSON_query(image_url,'$.images') as "IMAGE_URL", CONTENT, REG_DATE, LIKES
 						from post_feeds 
 						where reg_date >= sysdate-3 
 						order by likes DESC
-		                    ) A
+		             ) A
             )B
 		where B.RNUM BETWEEN ${start} AND ${end}
 	]]>
