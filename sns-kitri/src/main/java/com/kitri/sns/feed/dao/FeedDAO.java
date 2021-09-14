@@ -1,15 +1,18 @@
 package com.kitri.sns.feed.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import com.kitri.sns.feed.vo.FeedVO;
 
 public interface FeedDAO {
 
-  public int selectFollowingNum();
+  public int getFollowingNum(Map<String,String> map);
 
-  public FeedVO selectFollowFeeds();
+  public List<FeedVO> getFollowFeeds(Map<String,String> map);
 
-  public FeedVO selectRandomFeeds();
+  public List<FeedVO> getRandomFeeds(Map<String,String> map);
 
-  public FeedVO selectMoreFeeds();
+  public List<FeedVO> getMoreFeeds(Map<String,String> map);
 
 }

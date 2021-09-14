@@ -6,35 +6,66 @@
 		<result property="memberId" column="member_id" />
 		<result property="imageURL" column="image_URL" />
 		<result property="content" column="content" />
-		<result property="regdate" column="regdate" />
+		<result property="regdate" column="reg_date" />
 		<result property="likes" column="likes" />
 	</resultMap>
 
 	<select id="selectFollowingNum" resultType="int">
 		select following_num 
 		from members 
-		where member_id = ${id};
+		where member_id = '${loginid}'
 	</select>
 
-	<select id="selectFollowingFeed" resultType="feedVO">
-		select *
-		from (  select rownum RNUM, A.*
+	<select id="selectFollowingFeeds" resultMap="FeedMap">
+	<![CDATA[                                            
+		select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+		from (  select rownum RNUM, FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
 				from( select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
                         from post_feeds 
                         where member_id in (select follow_id 
                                             from member_follow
-                                            where member_id = 'okh970526' )
+                                            where member_id = '${loginid}' )
                         and REG_DATE >= sysdate-3
+                        order by reg_date desc
                     ) A
             )B
-where B.RNUM BETWEEN ${start} AND ${end};
+		where B.RNUM BETWEEN ${start} AND ${end}
+	]]>
 	</select>
 	
-	<select id="selectRandomFeed" resultType="feedVO">
+	<select id="selectFollowingMoreFeeds" resultMap="FeedMap">
+	<![CDATA[
 		select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
-		from post_feeds 
-		where reg_date >= sysdate-3 
-		order by likes DESC;
+			from (  select rownum RNUM, FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+					from( select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+	                        from post_feeds 
+	                        where member_id in (select A.follow_id
+	                                            from (select count(*),follow_id from member_follow
+	                                                    where member_id in (select follow_id from member_follow
+	                                                                        where member_id = '${loginid}')
+	                                                    group by (follow_id)
+	                                                    order by count(*) desc ) A
+	                                            where rownum<4 )
+	                        and REG_DATE >= sysdate-3
+	                        order by reg_date desc
+	                    ) A
+	            )B
+		where B.RNUM BETWEEN ${start} AND ${end}
+	]]>
+	</select>
+	
+	<select id="selectRandomFeeds" resultMap="FeedMap">
+	<![CDATA[
+		select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+		from (  select rownum RNUM, FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+				from( select FEED_ID, MEMBER_ID, IMAGE_URL, CONTENT, REG_DATE, LIKES
+						from post_feeds 
+						where reg_date >= sysdate-3 
+						order by likes DESC
+		                    ) A
+            )B
+		where B.RNUM BETWEEN ${start} AND ${end}
+	]]>
 	</select>
 	
 	
