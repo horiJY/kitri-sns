@@ -5,8 +5,9 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-
 		<typeAlias alias="member" type="com.kitri.sns.login.vo.MemberVO"/>
+		<typeAlias alias="feedVO" type="com.kitri.sns.feed.vo.FeedVO"/>
+		
 	</typeAliases>
 
 </configuration>
