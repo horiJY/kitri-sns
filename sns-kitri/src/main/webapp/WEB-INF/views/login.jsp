@@ -145,8 +145,7 @@ $(document).ready(function(){
 			</div>
 			<div id="join" class="form_field">
 				<form action="${path }/login/signup-regist" id="signupForm" method="POST" class="form join">
-					<input type="hidden" id="thumnail" name="thumnail" value="/image/members/thumnail.jpg">
-					<input type="hidden" id="introduce" name="introduce" value="">
+					<input type="hidden" id="introduce" name="introduce" value=" ">
 					<div id="signinclick" class="change">
 						<span class="or">or</span>
 						<span class="sign">SIGNIN?</span>

@@ -10,7 +10,6 @@
 		<result property="age" column="age"/>
 		<result property="follower" column="follower_num"/>
 		<result property="following" column="following_num"/>
-		<result property="thumnail" column="thumnail"/>
 		<result property="introduce" column="introduce"/>
 		
 	</resultMap>
@@ -27,8 +26,8 @@
 	</select>
 	
 	<insert id="insertMember" parameterType="member">
-		INSERT INTO MEMBERS (MEMBER_ID, PW, AGE, NAME, FOLLOWER_NUM, FOLLOWING_NUM, THUMNAIL, INTRODUCE)
-		VALUES (#{id},#{pw},#{age},#{name},0,0, #{thumnail}, #{introduce})
+		INSERT INTO MEMBERS (MEMBER_ID, PW, AGE, NAME, FOLLOWER_NUM, FOLLOWING_NUM)
+		VALUES (#{id},#{pw},#{age},#{name},0,0)
 		
 	</insert>
 </mapper>
