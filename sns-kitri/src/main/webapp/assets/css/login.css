@@ -9,10 +9,11 @@ body{
 	width:200px;
 	height:100px;
 	margin:0 auto;
-	margin-top:200px;
+	margin-top:120px;
+	text-align:center;
 }
 #logo {
-	width:200px;
+	width:150px;
 }
 #container{
 	margin:0 auto;
@@ -21,7 +22,8 @@ body{
 	
 }
 .change {
-	margin:30px;
+	font-size:14px;
+	margin:20px;
 	text-align: center;
 	font-weight: bold;
 	cursor: pointer;
@@ -35,7 +37,7 @@ body{
           transform: scale(1.05); 
 }
 .change .sign{
-	font-size: 20px;
+	font-size: 18px;
 }
 
 .form_field {
@@ -45,8 +47,6 @@ body{
 .form {
     margin: 3%;
     width: 94%;
-
-   
 }
 #login{
     display:initial;

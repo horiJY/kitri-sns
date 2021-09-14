@@ -1,6 +1,7 @@
 package com.kitri.sns.controller;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class LoginController {
 		return loginFlag;
 	}
 	
-	@RequestMapping("idcheck")
+	@RequestMapping("/idcheck")
 	@ResponseBody
 	public boolean idCheck(String id) {
 		//id가 있는지 조회
@@ -53,5 +54,13 @@ public class LoginController {
 		return "redirect:/login";
 	}
 	
+	@RequestMapping("/logout")
+	public String logout(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+	    session.invalidate();
+		
+		return "redirect:/login";
+	}
 }
 
