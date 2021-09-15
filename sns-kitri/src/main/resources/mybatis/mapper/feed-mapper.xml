@@ -36,19 +36,23 @@
 	<select id="selectFollowingMoreFeeds" resultMap="FeedMap">
 	<![CDATA[
 		select FEED_ID, MEMBER_ID, image_url, CONTENT, reg_date, LIKES
-			from (  select rownum RNUM, FEED_ID, MEMBER_ID, image_url, CONTENT, reg_date, LIKES
-					from( select FEED_ID, MEMBER_ID, image_url, CONTENT, TO_CHAR(reg_date, 'yy-MM-dd HH24:mi') as reg_date, LIKES
-	                        from post_feeds 
-	                        where member_id in (select A.follow_id
-	                                            from (select count(*),follow_id from member_follow
-	                                                    where member_id in (select follow_id from member_follow
-	                                                                        where member_id = '${loginid}')
-	                                                    group by (follow_id)
-	                                                    order by count(*) desc ) A
-	                                            where rownum<4 )
-	                        and REG_DATE >= sysdate-3
-	                        order by reg_date desc
-	                    ) A
+			from (select rownum RNUM, FEED_ID, MEMBER_ID, image_url, CONTENT, reg_date, LIKES
+				  from(select FEED_ID, MEMBER_ID, image_url, CONTENT, TO_CHAR(reg_date, 'yy-MM-dd HH24:mi') as reg_date, LIKES
+	                    from post_feeds 
+	                    where member_id in (select A.follow_id
+                                             from (select count(nf.follow_id) not_follow_member,nf.follow_id
+                                                   from member_follow nf, (select follow_id 
+                                                                           from member_follow 
+                                                                           where member_id = '${loginid}') fl  
+                                                   where nf.follow_id = fl.follow_id(+)
+                                                   and fl.follow_id is null
+                                                   and nf.follow_id != '${loginid}'
+                                                   group by nf.follow_id
+                                                   order by not_follow_member desc) A
+	                                        where rownum<4 )
+	                     and REG_DATE >= sysdate-3
+	                     order by reg_date desc
+	              ) A
 	            )B
 		where B.RNUM BETWEEN ${start} AND ${end}
 	]]>

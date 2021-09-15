@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="header.jsp"%>
 <style>
 body {
@@ -40,40 +41,54 @@ body {
 }
 
 #memberid {
-	display:flex;
+	display: flex;
 	align-items: center;
 }
 
-.memberthumnail{
-	width:44px;
-	height:44px;
-	margin : 10px;
+.memberthumnail {
+	width: 44px;
+	height: 44px;
+	margin: 10px;
 }
 
-.memberthumnail > img{
-	border-radius:50%;
-	
+.memberthumnail>img {
+	border-radius: 50%;
 }
 
 img {
-	width: 100%;
+	width: 98%;
 	height: 100%;
 }
 
-#content{
+#likes{
+	font-size: small;
+	margin-left:10px;
+	display: flex;
+}
+
+.likebtn{
+	margin-right:10px;
+	width:20px;
+	height:20px;
+}
+
+#content {
 	margin: 10px;
 }
-#regdate{
-	margin-left: 15px;
-	font-size:small;
-	color:gray;
+
+#regdate {
+	margin-left: 10px;
+	font-size: x-small;
+	color: gray;
+}
+
+#morelist {
+	border: 0;
+	cursor: pointer;
+	text-align: center;
+	margin: 5px;
 }
 </style>
-<script>
-	$(document).ready(function() {
-		console.log('${feedList}');
-	});
-</script>
 
 <div id="feedList">
 	<c:forEach items="${feedList}" var="feedvo">
@@ -83,7 +98,7 @@ img {
 				<div class="memberthumnail">
 					<img src="${path}/image/members/${feedvo.memberId}/thumnail.jpg">
 				</div>
-			${feedvo.memberId}
+				${feedvo.memberId}
 			</div>
 			<div id="imgListWrapper">
 				<c:forEach items="${feedvo.imageURL}" var="imgurl">
@@ -91,12 +106,70 @@ img {
 						src="${path}/image/members/${feedvo.memberId}/${feedvo.feedId}/${imgurl}">
 				</c:forEach>
 			</div>
+			<div id="likes"><img class="likebtn" src="${path}/image/icon/noti.png"/> 좋아요 ${feedvo.likes } 개</div>
 			<div id="content">${feedvo.content }</div>
 
 			<div id="regdate">${feedvo.regdate}</div>
 		</div>
 	</c:forEach>
+	<div id="morefeedwrapper">
+	</div>
 </div>
+<div id="morelist">더 보기</div>
+<script>
+	$(document).ready(function() {
+		$("#morelist").on("click", function() {
+			let start = $("#morefeedwrapper").length;
+			let end = start + 8;
 
+					$.ajax({
+						url:"${path}/morelist",
+						type:"post",
+						data:{"start":start,"end":end},
+						dataType:"json",
+						success:function(data){
+							console.log(data);
+							if(data.length < 9){
+								$("#morelist").remove();
+							}
+
+							if(data.length>0){
+								let morefeedlist = "";
+								for(let i=0; i < data.length; i++){
+									morefeedlist += "<div class='feedwrapper'>"
+										+"<input type='hidden' id='feedid' value='"+data[i].feedId+"'/>"
+										+"<div id='memberid'>"
+										+"<div class='memberthumnail'>"
+										+"<img src='${path}/image/members/"+data[i].memberId+"/thumnail.jpg' />"
+										+"</div>"
+										+data[i].memberId
+										+"</div>"
+										+"<div id='imgListWrapper'>";
+										for(let j=0; j<data[i].imageURL.split(',').length; j++){
+											morefeedlist += "<img class='feedimgbox' src='${path}/image/members/"+data[i].memberId+"/"+data[i].feedId+"/"+data[0].imageURL.split(',')[j]+"'>"; 
+										}
+										morefeedlist += "</div>"
+													+"    <div id='likes'> 좋아요 "+data[i].likes+"개</div>"
+													+"    <div id='content'>"+data[i].content+"</div>"
+													+"    <div id='regdate'>"+data[i].regdate+"</div>"
+													+"</div>";
+								}
+								$("#morefeedwrapper").append(morefeedlist).trigger("create");
+							}
+						},
+						error:function(request,status,error){
+							console.log("code:"+request.status);
+							console.log("message:"+request.responseText);
+							console.log("error:"+error);
+						}
+					});
+		});
+		
+		$(".likebtn").on("click",function(event) {
+			console.log(event);
+			
+		});
+	});
+</script>
 </body>
 </html>

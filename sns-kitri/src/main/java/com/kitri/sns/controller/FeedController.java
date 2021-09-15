@@ -2,17 +2,13 @@ package com.kitri.sns.controller;
 
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.kitri.sns.feed.service.FeedService;
 import com.kitri.sns.feed.vo.FeedVO;
 
@@ -22,8 +18,7 @@ public class FeedController {
   private FeedService feedService;
 
   @GetMapping("")
-  public String feedboard(HttpServletRequest req, HttpSession session, Map<String, String> map,
-      Model model) {
+  public String feedboard(HttpSession session, Map<String, String> map, Model model) {
     // map.put("loginid", session.getAttribute("id").toString());
     map.put("loginid", "okh970526");
     // map.put("loginid", "roses_are_rosie");
@@ -50,8 +45,8 @@ public class FeedController {
     for (FeedVO c : feedList) {
       System.out.println(c.toString());
     }
-//    Gson gson = new Gson();
-//    model.addAttribute("feedList", gson.toJson(feedList));
+    // Gson gson = new Gson();
+    // model.addAttribute("feedList", gson.toJson(feedList));
     model.addAttribute("feedList", feedList);
     return "feedboard";
   }
@@ -59,11 +54,16 @@ public class FeedController {
   @RequestMapping("/morelist")
   @ResponseBody
   public List<FeedVO> moreList(String start, String end, Map<String, String> map) {
+    // map.put("loginid", session.getAttribute("id").toString());
+    map.put("loginid", "okh970526");
     map.put("start", start);
     map.put("end", end);
-    List<FeedVO> feedList = null;
+    System.out.println("id:" + map.get("loginid") + "check:" + start + "," + end);
+    List<FeedVO> feedList = feedService.moreFollowFeeds(map);
 
-    feedList = feedService.moreFollowFeeds(map);
+    for (FeedVO c : feedList) {
+      System.out.println(c);
+    }
 
     return feedList;
   }
