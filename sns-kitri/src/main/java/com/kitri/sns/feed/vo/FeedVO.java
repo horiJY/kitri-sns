@@ -1,13 +1,11 @@
 package com.kitri.sns.feed.vo;
 
-import java.util.Date;
-
 public class FeedVO {
   private int feedId;
   private String memberId;
   private String imageURL;
   private String content;
-  private Date regdate;
+  private String regdate;
   private int likes;
 
 
@@ -15,7 +13,7 @@ public class FeedVO {
   @Override
   public String toString() {
     return "feedId=" + feedId + ", memberId=" + memberId + ", imageURL=" + imageURL + ", content="
-        + content + ", regdate=" + regdate + ", likes=" + likes;
+        + content + ", regString=" + regdate + ", likes=" + likes;
   }
 
   public int getFeedId() {
@@ -31,10 +29,10 @@ public class FeedVO {
   }
 
   public void setMemberId(String memberId) {
-    this.memberId = memberId;
+	  this.memberId = (memberId);
   }
 
-  public String getImageURL() {
+public String getImageURL() {
     return imageURL;
   }
 
@@ -50,11 +48,11 @@ public class FeedVO {
     this.content = content;
   }
 
-  public Date getRegdate() {
+  public String getregdate() {
     return regdate;
   }
 
-  public void setRegdate(Date regdate) {
+  public void setregdate(String regdate) {
     this.regdate = regdate;
   }
 
