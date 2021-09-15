@@ -19,6 +19,8 @@ public class FeedController {
 
   @GetMapping("")
   public String feedboard(HttpSession session, Map<String, String> map, Model model) {
+    // if (session.getAttribute("id") == null)
+    // return "login";
     // map.put("loginid", session.getAttribute("id").toString());
     map.put("loginid", "okh970526");
     // map.put("loginid", "roses_are_rosie");
@@ -42,9 +44,6 @@ public class FeedController {
 
     }
 
-    for (FeedVO c : feedList) {
-      System.out.println(c.toString());
-    }
     // Gson gson = new Gson();
     // model.addAttribute("feedList", gson.toJson(feedList));
     model.addAttribute("feedList", feedList);
@@ -58,13 +57,15 @@ public class FeedController {
     map.put("loginid", "okh970526");
     map.put("start", start);
     map.put("end", end);
-    System.out.println("id:" + map.get("loginid") + "check:" + start + "," + end);
     List<FeedVO> feedList = feedService.moreFollowFeeds(map);
 
-    for (FeedVO c : feedList) {
-      System.out.println(c);
-    }
-
     return feedList;
+  }
+
+  @RequestMapping("/feedlike")
+  @ResponseBody
+  public int feedlike(String feedid, Map<String, String> map) {
+    map.put("feedid", feedid);
+    return feedService.putFeedLike(map);
   }
 }

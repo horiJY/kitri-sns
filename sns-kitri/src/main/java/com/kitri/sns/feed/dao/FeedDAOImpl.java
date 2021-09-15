@@ -33,4 +33,9 @@ public class FeedDAOImpl implements FeedDAO {
     return sqlSession.selectList("feed.selectFollowingMoreFeeds", map);
   }
 
+  @Override
+  public int updateFeedLike(Map<String, String> map) {
+    int check = sqlSession.update("feed.updateFeedLike", map);
+    return sqlSession.selectOne("feed.selectFeedLikes", map);
+  }
 }

@@ -72,5 +72,15 @@
 	]]>
 	</select>
 	
+	<update id="updateFeedLike" >
+		UPDATE post_feeds 
+		SET likes = likes+1 
+		where feed_id = ${feedid}
+	</update>
 	
+	<select id="selectFeedLikes" resultType="int">
+		SELECT likes
+		from post_feeds
+		where feed_id = ${feedid}
+	</select>
 </mapper>

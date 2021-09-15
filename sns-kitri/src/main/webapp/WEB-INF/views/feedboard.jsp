@@ -106,7 +106,10 @@ img {
 						src="${path}/image/members/${feedvo.memberId}/${feedvo.feedId}/${imgurl}">
 				</c:forEach>
 			</div>
-			<div id="likes"><img class="likebtn" src="${path}/image/icon/noti.png"/> 좋아요 ${feedvo.likes } 개</div>
+			<div id="likes">
+				<img class="likebtn" src="${path}/image/icon/noti.png"/>
+				좋아요 ${feedvo.likes } 개
+			</div>
 			<div id="content">${feedvo.content }</div>
 
 			<div id="regdate">${feedvo.regdate}</div>
@@ -166,7 +169,23 @@ img {
 		});
 		
 		$(".likebtn").on("click",function(event) {
-			console.log(event);
+			let selectfeed = $(event.target).parent().parent();
+			
+			$.ajax({
+				url:"${path}/feedlike",
+				type:"post",
+				data:{"feedid": selectfeed.children('#feedid').val()},
+				dataType:"json",
+				success:function(data){
+					selectfeed.children('#likes').html('<img class="likebtn" src="${path}/image/icon/likecheck.png"/> 좋아요 '+data+' 개');
+				},
+				error:function(request,status,error){
+					console.log("code:"+request.status);
+					console.log("message:"+request.responseText);
+					console.log("error:"+error);
+				}
+			});
+			
 			
 		});
 	});
