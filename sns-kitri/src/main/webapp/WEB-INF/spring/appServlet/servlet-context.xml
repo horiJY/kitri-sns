@@ -23,6 +23,8 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
+	<context:property-placeholder location="classpath:/mybatis/db.properties"/>
+	
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<beans:property name="driverClassName" value="${driver}"/>
 		<beans:property name="url" value="${url}"/>

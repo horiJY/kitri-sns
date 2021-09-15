@@ -33,90 +33,13 @@ public class DMHandler extends TextWebSocketHandler {
 	@Autowired
 	private MessageService msgService;
 	
-	private List<Map<String, Object>> sessionList = new ArrayList<Map<String, Object>>();
+//	private List<Map<String, Object>> sessionList = new ArrayList<Map<String, Object>>();
+	
+	private Map<String, WebSocketSession> sessionList = new HashMap<String, WebSocketSession>();
 	
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-		// id1, id2 값 받아서 db에 없으면 생성
-		// 아이디 두 개 값 받아서 db에 이전 대화기록 있을 시 가장 최근 3개의 path의 파일 가져오기
-		// path : file : json : 값 dmboard.jsp 전송
-		
-		Map<String, Object> map;
-		map = session.getAttributes();
-
-		Map<String, Object> sessionMap = new HashMap<String, Object>();
-		
-		
-		String senderId = (String) map.get("senderId");
-		String receiverId = (String) map.get("receiverId");
-		String context = (String)map.get("path");
-		SimpleDateFormat format1 = new SimpleDateFormat ("yyyyMMdd");
-		Date today = new Date();
-		String tdy = format1(today);
-		
-		String path1 = context + senderId + "_" + receiverId + "_" + tdy;
-		String path2 = context + receiverId + "_" + senderId + "_" + tdy;
-		
-		sessionMap.put("senderId", senderId);
-		sessionMap.put("receiverId", receiverId);
-		sessionMap.put(session.getId(), session);
-		sessionList.add(sessionMap);
-		
-		map.put("senderId", senderId);
-		map.put("receiverId", receiverId);
-		
-		List<MessageVO> msgList = msgService.getMessageDetail(map);
-		
-		//파일 경로 : C://..... + path1으로 변경하기
-		
-		
-		File file = new File(path1);
-		File file2 = new File(path2);
-		int insertResult = 0;
-		
-		if(!file.exists() && !file2.exists()) {
-			String lastMsg = "";
-			
-			MessageVO mvo = new MessageVO();
-			mvo.setId1(senderId);
-			mvo.setId2(receiverId);
-			mvo.setPath(path1);
-			mvo.setLastMsg(lastMsg);
-			insertResult = msgService.insertMessage(mvo);
-			
-			if(insertResult != 0) { 
-				file.createNewFile();
-			}
-		}else {
-			path1 = msgList.get(0).getPath();
-		}
-		List<MessageDetailVO> msgDetail = new ArrayList<MessageDetailVO>();
-		JsonParser parser = new JsonParser();
-		
-		for(int i = 0; i < msgList.size(); i++) {
-			BufferedReader read = null;
-			if(!file.exists() && file2.exists()) {
-				read = new BufferedReader(new FileReader(msgList.get(i).getPath()));
-			}else {
-				read = new BufferedReader(new FileReader(msgList.get(i).getPath()));
-			}
-			String line = null;
-			while((line = read.readLine()) != null) {
-				MessageDetailVO mdvo = new MessageDetailVO();
-				Object obj = parser.parse(read); 
-				JSONObject jsonObject = (JSONObject)obj;
-				
-				mdvo.setSender((String)jsonObject.get("sender"));
-				mdvo.setReceiver((String)jsonObject.get("receiver"));
-				mdvo.setTime((String)jsonObject.get("time"));
-				mdvo.setMsg((String)jsonObject.get("msg"));
-				
-				msgDetail.add(mdvo);
-			}
-		}
-		Gson gson = new Gson();
-		
-		session.sendMessage(new TextMessage(gson.toJson(msgDetail)));
+		sessionList.put(session.getId(), session);
 	}
 	
 	@Override
@@ -132,7 +55,6 @@ public class DMHandler extends TextWebSocketHandler {
 		String msg = mapReceive.get("msg");
 		String path = mapReceive.get("path");
 		
-		SimpleDateFormat format1 = new SimpleDateFormat ("yyyyMMdd");
 		Date today = new Date();
 
 		JSONObject obj = new JSONObject();
@@ -156,8 +78,4 @@ public class DMHandler extends TextWebSocketHandler {
 		sessionList.remove(session);
 	}
 	
-	private String format1(Date today) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
