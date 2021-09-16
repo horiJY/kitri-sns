@@ -6,8 +6,11 @@
 	xmlns:websocket="http://www.springframework.org/schema/websocket"
 	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
 		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<context:component-scan base-package="com.kitri.sns" />
 
@@ -16,6 +19,9 @@
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
+	<resources mapping="/assets/**" location="/assets/" />
+   	<resources mapping="/image/**" location="/image/" />
+   	<resources mapping="/upload/**" location="/uploadfolder/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -23,23 +29,33 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:property-placeholder location="classpath:/mybatis/db.properties"/>
+	<context:property-placeholder location="classpath:mybatis/db.properties"/>
 	
-	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<beans:property name="driverClassName" value="${driver}"/>
-		<beans:property name="url" value="${url}"/>
-		<beans:property name="username" value="${user}"/>
-		<beans:property name="password" value="${password}"/>
+	<beans:bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<beans:property name="driverClassName" value="${driver}" />
+		<beans:property name="url" value="${url}" />
+		<beans:property name="username" value="${user}" />
+		<beans:property name="password" value="${password}" />
 	</beans:bean>
-	
+
+	<!-- Mybatis sqlSession 설정 -->
 	<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<beans:property name="dataSource" ref="dataSource"/>
-		<beans:property name="configLocation" value="classpath:/mybatis/config/mybatis-config.xml"/>
-		<beans:property name="mapperLocations" value="classpath:/mybatis/mapper/*-mapper.xml"/>
+		<beans:property name="dataSource" ref="dataSource" />
+		<!-- 		<beans:property name="configLocation" value="classpath:mybatis/config/mybatis-config.xml" /> -->
+		<!-- value ="" 안에 classpath:로 넣으면src/main/resources까지가 프로젝트 buildpath로 잡혀있기 때문에 찾아갈 수 있다.  -->
+		<beans:property name="configLocation" value="classpath:mybatis/config/mybatis-config.xml" />
+		<beans:property name="mapperLocations"	value="classpath:mybatis/mapper/*-mapper.xml" />
+	</beans:bean>
+
+	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<beans:constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</beans:bean>
 	
-	<beans:bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
-		<beans:constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="20000000"/>
+		<beans:property name="maxInMemorySize" value="20000000"/>
+		<beans:property name="defaultEncoding" value="utf-8"/>
 	</beans:bean>
 	
 	<websocket:handlers>
@@ -50,3 +66,4 @@
 	<beans:bean id="dmHandler" class="com.kitri.sns.message.DMHandler"></beans:bean>
 	
 </beans:beans>
+
