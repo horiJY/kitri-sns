@@ -11,7 +11,6 @@
 		<result property="follower" column="follower_num"/>
 		<result property="following" column="following_num"/>
 		<result property="introduce" column="introduce"/>
-		
 	</resultMap>
 	
 	<select id="selectMember" resultMap="memberMap">
@@ -30,4 +29,10 @@
 		VALUES (#{id},#{pw},#{age},#{name},0,0)
 		
 	</insert>
+	
+	<select id="searchAllUser" resultMap="memberMap">
+	SELECT MEMBER_ID, NAME
+	FROM MEMBERS
+	ORDER BY MEMBER_ID
+	</select>
 </mapper>

@@ -168,3 +168,44 @@ header {
 	margin-right:6px;
 }
 
+#ui-id-1{
+	margin-top: 20px;
+}
+.searchlist{
+	padding-top:8px;
+}
+.searchlist:focus {
+	background-color: #aaa;
+	margin-left:20px;
+}
+
+.searchitem.ui-menu-item-wrapper > img{
+	border-radius: 50%;
+	float: left;
+	width: 36px;
+	height: 36px;
+	margin-right : 8px;
+}
+.searchid{
+    font-size: 14px;
+    font-weight: bold;
+}
+.searchname{
+	font-size: 0.5em;
+}
+.ui-autocomplete {
+	overflow-y: auto;
+	max-height: 200px;
+	overflow-x: hidden;
+	border-radius: 4px;
+}
+.ui-widget-content .ui-state-active{
+	border-color: #aaa ;
+/* 	background: #EE9BA3; */
+	background: #aaa;
+	font-weight: normal;
+	color: #ffffff;
+}
+.ui-widget-content{
+	color: #555;
+}
