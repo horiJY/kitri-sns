@@ -36,6 +36,7 @@ $(document).ready(function(){
 			success:function(data){
 			
 				if(data){
+// 					로그인 후 이동 : 추후 @ history.back()으로 교체예정
 					window.location.replace("${pageContext.request.contextPath}/");
 				} else {
 					$("#loginMsg").css("color", "red");
