@@ -5,7 +5,7 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-
+		<typeAlias type="com.kitri.sns.post.vo.PostImgVO" alias="postupload"/>
 		<typeAlias alias="member" type="com.kitri.sns.login.vo.MemberVO"/>
 	</typeAliases>
 
