@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dmsearch">
-	<resultMap type="com.kitri.sns.message.vo.FollowVO" id="followMap">
+	<resultMap type="com.kitri.sns.message.vo.MemberVO" id="followMap">
 		<result property="memberId" column="memeber_id" />
-		<result property="followId" column="follow_id" />
-		<result property="followDate" column="follow_date" />
+		<result property="name" column="name" />
 	</resultMap>
 	
 	<select id="selectFollowList" resultMap="followMap">
-		SELECT FOLLOW_ID FROM MEMBER_FOLLOW WHERE MEMBER_ID = #{memberId}
+		SELECT MEMBER_ID, NAME FROM MEMBERS 
+		WHERE MEMBER_ID IN ( 
+							SELECT FOLLOW_ID FROM MEMBER_FOLLOW 
+							WHERE MEMBER_ID = #{memberId}
+							) 
+		ORDER BY MEMBER_ID
 	</select>
 </mapper>

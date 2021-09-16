@@ -14,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import org.json.simple.parser.JSONParser;
@@ -64,7 +65,7 @@ public class DMController {
 
 	@RequestMapping("/detail")
 	@ResponseBody
-	public String DMDetail(String senderId, String receiverId, String day, Model model) throws Exception {
+	public List<MessageDetailVO> DMDetail(String senderId, String receiverId, String day) throws Exception {
 
 //		String senderId = mvo.getId1();
 //		String receiverId = mvo.getId2();
@@ -103,57 +104,46 @@ public class DMController {
 		
 		msgList = msgService.selectMessageDetail(map);
 		List<MessageDetailVO> msgDetail = new ArrayList<MessageDetailVO>();
-		
 		JSONParser parser = new JSONParser();
-		JSONArray jArr = new JSONArray();
 		for (int i = 0; i < msgList.size(); i++) {
 			BufferedReader read = null;
 			if (!file.exists() && file2.exists()) {
 				read = new BufferedReader(new FileReader(msgList.get(i).getPath()));
-			} else {
+			} else if(file.exists() && !file2.exists()){
 				read = new BufferedReader(new FileReader(msgList.get(i).getPath()));
 			}
 			
 			String line = "";
 			
 			while ((line = read.readLine()) != null) {
-//				MessageDetailVO mdvo = new MessageDetailVO();
-//				
-//				Object obj = parser.parse(read);
-//				
-//				JSONObject jsonObject = (JSONObject) obj;
-//
-//				mdvo.setSender((String) jsonObject.get("senderId"));
-//				mdvo.setReceiver((String) jsonObject.get("receiverId"));
-//				mdvo.setTime((String) jsonObject.get("time"));
-//				mdvo.setMsg((String) jsonObject.get("msg"));
-//
-//				msgDetail.add(mdvo);
+				if(!line.trim().equals("")) {
+					
+				MessageDetailVO mdvo = new MessageDetailVO();
+				Object obj = parser.parse(line);
 				
-				jArr.add(read.readLine());
+				JSONObject jsonObject = (JSONObject) obj;
+
+				mdvo.setSender((String) jsonObject.get("senderId"));
+				mdvo.setReceiver((String) jsonObject.get("receiverId"));
+				mdvo.setTime((String) jsonObject.get("time"));
+				mdvo.setMsg((String) jsonObject.get("msg"));
+
+				msgDetail.add(mdvo);
 				
-			}
-			for(int j = 0; j < jArr.size(); j++) {
-				System.out.println(j + " : " + jArr.get(j));
+				}
 			}
 		}
 		
-		Gson gson = new Gson();
-
-		model.addAttribute("dmDetail", gson.toJson(msgDetail));
-
-		return "dmboard";
+		return msgDetail;
 	}
 
-	@RequestMapping("/dmsearch")
+	@RequestMapping(value="/dmsearch",method = RequestMethod.GET, produces="text/plain;charset=UTF-8")
 	@ResponseBody
-	public String DMSearch(Model model, String memberId) {
+	public String DMSearch(String memberId) {
 
 		List<FollowVO> followList = msgService.selectFollowList("jennierubyjane");
 		Gson gson = new Gson();
 
-		model.addAttribute("followList", gson.toJson(followList));
-
-		return "searchtest";
+		return gson.toJson(followList);
 	}
 }

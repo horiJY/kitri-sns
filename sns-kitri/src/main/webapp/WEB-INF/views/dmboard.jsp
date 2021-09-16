@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <head>
     <meta charset="UTF-8">
@@ -424,48 +424,274 @@ h3 {
        $('.chat').hide();
       $('.leftsearchbar').hide(); 
       $('.leftdiscussion').show();
-       
-        var myId = "jennierubyjane";
+        
+      //나의 id
+        var myId = "roses_are_rosie";
         $('.my-id').html;
         $('.my-id').append(myId);
-        console.log('${dmList}');
-
-        var List = '${dmList}';
-        var aList = List.split('],');
-        //console.log(aList);
-        var bList = aList[0].split('[');
-        //console.log(bList);
-        var cList = bList[1].split(',');
-		
-       $('.name').html;
-        $('.name').append(cList[1].replace(/\"/g,''));
-        $('.message').html;
-        $('.message').append(cList[3].replace(/\"/g,''));
-        $('.timer').html;
-        $('.timer').append(cList[2].replace(/\"/g,''));
         
+        var dmList = '${dmList}';
+        console.log(dmList);
+        
+        
+        const obj = JSON.parse(dmList);
+        
+
+        
+       //현제 날짜 체크
+       let today = new Date();   
+
+      let year = today.getFullYear(); // 년도
+      let month = today.getMonth() + 1;  // 월
+      let date = today.getDate();  // 날짜
+      let day = today.getDay();  // 요일
+      if(month<10){
+         month = "0"+month;
+      }
+      if(date<10){
+         month = "0"+date;
+      }
+      let todayDate = (year +  month +  date);
+      console.log(todayDate);
+      
+      
+      
+        //키값만 추출
+          var name = Object.keys(obj);
+          var value = Object.values(obj);
+        
+        //키 개수
+        var keylength = name.length;
+        console.log(name.length);
+
+        for(var i=0; i<name.length; i++){
+            if(myId == name[i]){
+            console.log(name[i]);
+            //const value = obj.$('myId');
+            var valuess = value[i];
+            console.log(valuess[0]);
+            console.log(valuess[1]);
+            console.log(valuess[2]);
+            console.log(valuess[3]);
+            
+            }else{
+               
+            }
+        }
+
+
+        
+        
+        
+        
+        console.log(obj.bn_sj2013);
+        console.log(obj.bn_sj2013.length);
+        //console.log(obj.bn_sj2013[0]);
+        
+        //obj.appendChild()
+        
+       //key값과 myid비교
+       //value값에 index
+       //순서대로 뿌리기
+              
+      //});
+       
+//        JSON.parse('${dmList}', (key, value) => {
+   
+//             console.log(key); 
+//             console.log(value);    
+//           });
+      
+
+        
+/*        
+      //메세지 보내기 누를 때
+        $('.button').on("click", function(){
+           $('.leftdiscussion').empty();
+           $('.chat').empty();
+           $('.leftsearchbar').show();
+           
+           
+           
+        });
+        
+        
+        
+       //위에 메세지 icon 누를 때
+        $('.icon-message').on("click", function(){
+            $('.leftdiscussion').hide();
+            $('.chat').hide();
+           var aa = document.getElementsByClassName('leftdiscussion');
+              while(aa.section) {
+              aa.removeChild(aa.section);
+           }
+            var aa = document.getElementsByClassName('chat');
+              while(aa.section) {
+              aa.removeChild(aa.section);
+           }
+           $('.leftsearchbar').show();
+           
+           
+           $.ajax({
+        		type : 'get',
+        		url: '${path }/dmsearch',
+        		data : {'memberId' : myID},
+        		dataType : 'json',
+        		success : function(data) {
+        			var usersource = new Array();
+        			$.each(data, function(idx, obj) {
+        				var user = new Object();
+        				user.value = obj.id;
+        				user.name = obj.name;
+        				usersource.push(user);
+        			});
+        			$( "#search" ).autocomplete({
+        				minLength: 1,
+        				source: usersource,
+        				focus: function( event, ui ) {
+        			 		$( "#search" ).val( ui.item.value );
+        				 	return false;
+        				},
+        				autofocus: true,
+        				select: function( event, ui ) {
+        					$( "#search" ).val( ui.item.value );
+        				 	return false;
+        				},
+        				position : { my : 'right top', at : 'right bottom'},
+        				disable : false, // 해당 값 true 시, 자동완성 기능 꺼짐
+        			})
+        			.autocomplete( "instance" )._renderItem = function( ul, item ) {
+        				return $( "<li class='searchlist'>" )
+        				.append( "<div class='searchitem'>"
+        						+ "<img src='${path}/image/members/" + item.value + "/thumnail.jpg'>" 
+        						+ "<div class='user'><span class='searchid'>" + item.value + "</span><br>" 
+        						+ "<span class='searchname'>" + item.name + "</span><div>" 
+        						+ "</div>" )
+        				.appendTo( ul );
+        			};
+        		}
+        	});
+           
+        });
+       
+              
         //채팅창 누를때
         $('.desc-contact').on("click", function(){
-         $('.leftdiscussion').hide();
-         $('.leftsearchbar').hide();
-         $('.chat').show();
-         
-         let senderId="jennierubyjane";
-         let receiverId="roses_are_rosie";
-         let day = "210915";
-         
-            $.ajax({
-                url:"http://localhost:8080/sns/message/detail",
-                type:"GET",
-                data:{"senderId" : senderId, "receiverId" : receiverId, "day" : day},
-                dataType:"json",
-                  success:function(data){
-                   console.log(data)
-                   console.log('${dmDetail}');
-                }         
-         });
+          $('.leftdiscussion').hide();
+          $('.leftsearchbar').hide();
+          $('.chat').show();
+          
+          let senderId="";
+          let reveiverId="";
+          
+             $.ajax({
+                 url:"http://localhost:8080/sns/message/detail",
+                 type:"post",
+                 data:{"senderId" : senderId, "reveiverId" : reveiverId},
+                 dataType:"json",
+                   success:function(data){
+                    for(let i=0; i<data.length; i++){
+                        let senderId = "${senderId}";
+                        if(myId.equals(senderId)){
+                       
+                           //날짜 체크
+                           let dataDate = "";
+
+                           let today = new Date();   
+                           let year = today.getFullYear(); // 년도
+                          let month = today.getMonth() + 1;  // 월
+                          if(month<10){
+                             var month = "0"+month;
+                             console.log(month);
+                          }
+                           let date = today.getDate();  // 날짜
+                           let todayDate = (year + month + date);
+ 
+                       
+                           //채팅창에 날짜가 다를 때
+                           if(!datadate.equals(todayDate)){
+                              let leftDiscussion="";
+                              for(let i=0; i<data.length; i++){
+                                 leftDiscussion += "<hr>"+"<div class='chat_header'>"+
+                                       "<img class='photo' style='background-image: url();'/>"+
+                                       "<hr class='chat_status'/></div>"+
+                                       "<div class='chat_s'>"+
+                                       //보내는 사람
+                                       "<div class='id-1'><div class='chat_id-1'>"+${data[i].msg}+"</div>"+
+                                       "<span class='message-time-id1'>"+${data[i].time}+"</span></div>"
+                                       //받는 사람
+                                       "<div class='id-2'>"+"<div class='chat_id-1'>"+${data[i].msg}+"</div>"+
+                                       "<span class='message-time-id2'>"+${data[i].time}+"</span></div>"
+                                 }
+                              var params = {   
+                                    sender : $("myid").val,
+                                    reveiver : $("name").val,
+                                    time : $("timer").val,
+                                    msg : $("message").val
+                                 }
+                              $.ajax({
+                                    type : "POST",
+                                    url : "",
+                                    data : params,
+                                    success : function(res){ 
+                                    alert(res.code);
+                                 },
+                                 error : function(XMLHttpRequest, textStatus, errorThrown){
+                                 alert("통신 실패.")
+                                 }
+                              });
+
+                           //채팅창에 날짜가 같을 때
+                           }else{
+                              leftdiscussion += +"<div class='chat_header'>"+
+                              "<img class='photo' style='background-image: url();'/>"+
+                              "<hr class='chat_status'/></div>"+
+                              "<div class='chat_s'>"+
+                              //보내는 사람
+                              "<div class='id-1'>"+"<div class='chat_id-1'>"+${data[i].msg}+"</div>"+
+                              "<span class='message-time-id1'>"+${data[i].time}+"</span></div>"
+                              //받는 사람
+                              "<div class='id-2'>"+"<div class='chat_id-1'>"+${data[i].msg}+"</div>"+
+                              "<span class='message-time-id2'>"+${data[i].time}+"</span></div>"
+                       
+                              var params = {
+                                    sender : $("myid").val,
+                                    reveiver : $("name").val,
+                                    time : $("timer").val,
+                                    msg : $("message").val,
+                              }
+                              $.ajax({
+                                 type : "POST",
+                                 url : "http://localhost:8080/sns-kitri/message/detail",
+                                 data : params,
+                                 success : function(res){ 
+                                 alert(res.code);
+                              },
+                              error : function(XMLHttpRequest, textStatus, errorThrown){
+                              alert("통신 실패.")
+                              }
+                           });  
+                        }
+                        $('.let-discussion').addClass(chat_header);
+                        }
+                        },
+                        });
+                        });
+                        });
+                    }
+                 }         
+          });
         });
-    });
+
+        
+*/        
+        
+        
+        
+   });
+    
+
+
 
 </script>
     
