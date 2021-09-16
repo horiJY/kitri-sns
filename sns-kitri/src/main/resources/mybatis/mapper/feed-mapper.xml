@@ -15,7 +15,7 @@
 		from members 
 		where member_id = '${loginid}'
 	</select>
-
+  
 	<select id="selectFollowingFeeds" resultMap="FeedMap">
 	<![CDATA[                                            
 		select FEED_ID, MEMBER_ID, image_url, CONTENT, REG_DATE, LIKES

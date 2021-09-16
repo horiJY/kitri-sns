@@ -1,13 +1,22 @@
 package com.kitri.sns.controller;
 
+
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
+
+
+import com.kitri.sns.post.service.PostImgService;
+import com.kitri.sns.post.service.PostImgService;
+import com.kitri.sns.post.vo.PostImgVO;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.kitri.sns.feed.service.FeedService;
 import com.kitri.sns.feed.vo.FeedVO;
@@ -61,11 +70,12 @@ public class FeedController {
 
     return feedList;
   }
-
+	
   @RequestMapping("/feedlike")
   @ResponseBody
   public int feedlike(String feedid, Map<String, String> map) {
     map.put("feedid", feedid);
     return feedService.putFeedLike(map);
   }
+
 }
