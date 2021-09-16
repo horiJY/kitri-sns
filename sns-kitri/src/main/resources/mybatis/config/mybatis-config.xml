@@ -7,6 +7,8 @@
 	<typeAliases>
 		<typeAlias type="com.kitri.sns.post.vo.PostImgVO" alias="postupload"/>
 		<typeAlias alias="member" type="com.kitri.sns.login.vo.MemberVO"/>
+		<typeAlias alias="feedVO" type="com.kitri.sns.feed.vo.FeedVO"/>
+		
 	</typeAliases>
 
 </configuration>

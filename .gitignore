@@ -69,7 +69,9 @@ local.properties
 .sts4-cache/
 
 ###Eclipse TomcatBuild###
-*/target/
+*/target
+*/target/**
+*/target*.*
 
 ### Java ###
 # Compiled class file

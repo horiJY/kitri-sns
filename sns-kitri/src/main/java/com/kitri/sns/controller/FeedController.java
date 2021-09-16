@@ -1,10 +1,8 @@
 package com.kitri.sns.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,112 +17,65 @@ import org.springframework.web.multipart.MultipartFile;
 import com.kitri.sns.post.service.PostImgService;
 import com.kitri.sns.post.service.PostImgService;
 import com.kitri.sns.post.vo.PostImgVO;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.kitri.sns.feed.service.FeedService;
+import com.kitri.sns.feed.vo.FeedVO;
 
 @Controller
 public class FeedController {
+  @Autowired
+  private FeedService feedService;
 
-//	@Autowired
-//	private PostImgService postService;
+  @GetMapping("")
+  public String feedboard(HttpSession session, Map<String, String> map, Model model) {
+    // if (session.getAttribute("id") == null)
+    // return "login";
+    // map.put("loginid", session.getAttribute("id").toString());
+    map.put("loginid", "okh970526");
+    // map.put("loginid", "roses_are_rosie");
+    // map.put("loginid", "jennierubyjane");
+    List<FeedVO> feedList = null;
+    // 팔로잉_num check
+    if (feedService.checkFollowing(map) > 0) { // 1 팔로잉_num>0
+      // 2 following 한 사람들의 3일 내의 feed를 가져옴(9개 단위로 끊어서)
+      map.put("start", "1");
+      map.put("end", "9");
+      feedList = feedService.getFollowFeeds(map);
+      // 3 2의 feed를 다 본 경우 내가 팔로잉하는 사람들이 가장 많이 팔로잉한 사람의 feed를 가져옴
+      // > this.morelist();
+
+    } else { // 1-1 팔로잉_num=0
+      // 2-1 최근 3일간 등록된 feed 중에 like수가 많은 수대로 가져옴(9개)
+      map.put("start", "1");
+      map.put("end", "9");
+      feedList = feedService.getRandomFeeds(map);
+      // 3-1 2-1의 피드에 다음 10개
+
+    }
+
+    // Gson gson = new Gson();
+    // model.addAttribute("feedList", gson.toJson(feedList));
+    model.addAttribute("feedList", feedList);
+    return "feedboard";
+  }
+
+  @RequestMapping("/morelist")
+  @ResponseBody
+  public List<FeedVO> moreList(String start, String end, Map<String, String> map) {
+    // map.put("loginid", session.getAttribute("id").toString());
+    map.put("loginid", "okh970526");
+    map.put("start", start);
+    map.put("end", end);
+    List<FeedVO> feedList = feedService.moreFollowFeeds(map);
+
+    return feedList;
+  }
 	
-//	@RequestMapping("")
-//	public String feedboard(Model model, Map<String,String> map) {
-//
-//		return "feedboard";
-//	}
-	
-	@GetMapping("")
-	public String feedboard() {
-		//session.id 없으면 login페이지로 이동
-		
-		//로그인 후 피드 가져오기
-		return "feedboard";
-	}
+  @RequestMapping("/feedlike")
+  @ResponseBody
+  public int feedlike(String feedid, Map<String, String> map) {
+    map.put("feedid", feedid);
+    return feedService.putFeedLike(map);
+  }
 
-//	@RequestMapping("/header")
-//	public String header() {
-//		
-//		return  "header";
-//	}
-
-
-//	@RequestMapping(value = "/fileupload", method = RequestMethod.POST)
-//	public String upload(MultipartFile uploadfile, HttpServletRequest req) {
-//		String uploadPath = req.getRealPath("uploadfolder"); // 서버 실제 경로
-//		System.out.println(uploadPath);
-//		String saveName = uploadfile.getOriginalFilename();
-//		File saveFile = new File(uploadPath, saveName); // 저장할 폴더 이름, 저장할 파일 이름
-//		try {
-//			uploadfile.transferTo(saveFile);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		PostImgVO pvo = new PostImgVO();
-//		
-//		
-//		
-//		postService.registImgBoard(pvo);
-//		
-//		
-//		return "header";
-//	}
-//	@RequestMapping("/fileupload")
-//	public String fileupload(MultipartFile uploadfile, 
-//										String content, 
-//										HttpServletRequest req, 
-//										HttpSession session ) {
-//		
-//		String id = (String)session.getAttribute("id");
-//		String uploadPath = req.getRealPath("uploadfolder");
-//		String saveName = uploadfile.getOriginalFilename();
-//		String uploadUniquePath = uploadPath+File.separator+id;
-//								//c:..../uploadfolder/admin
-//		boolean uploadConfirm = false;
-//		boolean registFlag = false;
-//		
-//		String path;
-//		
-//		try {
-//			File idFile = new File(uploadUniquePath);
-//			System.out.println("idFile : "+ idFile.exists());
-//			if(!idFile.exists()) {
-//				idFile.mkdir();
-//			}
-//			File saveFile = new File(idFile, saveName );
-//			//             ploadfolder/id+"/"+saveName
-//			uploadfile.transferTo(saveFile);
-//			uploadConfirm = true;
-//		} catch (IllegalStateException e) {
-//			e.printStackTrace();
-//			uploadConfirm = false;
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			uploadConfirm= false;
-//		}
-//		
-//		if(uploadConfirm) {
-//			PostImgVO pvo = new PostImgVO();
-//			pvo.setFeed_id(0);
-//			
-//			
-//			String insertImgPath = File.separator+"upload"+File.separator // /upload/
-//									+id 			// admin
-//									+File.separator //  
-//									+saveName;      //  a.jpg
-//									// /upload/admin/a.jpg
-//			pvo.setImage_url(insertImgPath);			
-//		    registFlag = postService.registImgBoard(pvo);
-//			
-//		}
-//		
-//		if(registFlag) {
-//			path = "redirect:/main";
-//		} else {
-//			path = "redirect:/imgboard-regist-page";
-//		}
-//		
-//		return path;
-//		
-//	}
-	
 }
