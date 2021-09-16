@@ -1,0 +1,1 @@
+{"senderId":"jennierubyjane","receiverId":"bn_sj2013","time":"20210915 08:21:33","msg":"TEST0915오전8시"}
