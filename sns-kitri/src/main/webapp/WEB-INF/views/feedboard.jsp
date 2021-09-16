@@ -72,13 +72,16 @@ img {
 	height:20px;
 }
 
-#content {
+#feedcontent {
 	margin: 10px;
+	height: 100px;
+    overflow-x: auto;
 }
 
 #regdate {
 	margin-left: 10px;
-	font-size: x-small;
+	margin-bottom: 10px;
+	font-size: small;
 	color: gray;
 }
 
@@ -110,7 +113,7 @@ img {
 				<img class="likebtn" src="${path}/image/icon/noti.png"/>
 				좋아요 ${feedvo.likes } 개
 			</div>
-			<div id="content">${feedvo.content }</div>
+			<div id="feedcontent">${feedvo.content }</div>
 
 			<div id="regdate">${feedvo.regdate}</div>
 		</div>
@@ -153,7 +156,7 @@ img {
 										}
 										morefeedlist += "</div>"
 													+"    <div id='likes'> 좋아요 "+data[i].likes+"개</div>"
-													+"    <div id='content'>"+data[i].content+"</div>"
+													+"    <div id='feedcontent'>"+data[i].content+"</div>"
 													+"    <div id='regdate'>"+data[i].regdate+"</div>"
 													+"</div>";
 								}

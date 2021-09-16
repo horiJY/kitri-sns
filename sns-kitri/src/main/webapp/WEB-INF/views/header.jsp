@@ -15,7 +15,7 @@
 		</head>
 
 		<body>
-			<% String id=(String)session.getAttribute("id"); %>
+			<% String id=(String)session.getAttribute("id");%>
 				<header>
 					<div class="centerize_wrapper">
 						<form id="header-main-nav">
@@ -48,7 +48,7 @@
 								<div class="sub-nav-box" id="sub-usernav-box">
 									<ul class="sub-usernav">
 										<li id="profile-li"><i class="far fa-user-circle"
-												aria-hidden="true"></i><span>프로필</span></li>
+												aria-hidden="true" ></i><span>${id }</span></li>
 										<li id="logout-li"><span>로그아웃</span></li>
 									</ul>
 								</div>
@@ -57,7 +57,6 @@
 					</div>
 				</header>
 				<script type="text/javascript">
-					var usersource = new Array();
 					$.ajax({
 						type: 'get',
 						url: '${path }/searchuser',
@@ -84,8 +83,7 @@
 								},
 								position: { my: 'right top', at: 'right bottom' },
 								disable: false, // 해당 값 true 시, 자동완성 기능 꺼짐
-							})
-								.autocomplete("instance")._renderItem = function (ul, item) {
+							}).autocomplete("instance")._renderItem = function (ul, item) {
 									return $("<li class='searchlist'>")
 										.append("<div class='searchitem'>"
 											+ "<img src='${path}/image/members/" + item.value + "/thumnail.jpg'>"
@@ -131,3 +129,64 @@
 						window.location.href = "${path }/login/logout";
 					});
 				</script>
+
+				
+		<!-- 모달창 -->  
+	<div id="modal-wrapper"> 
+		<div id="modal-box">
+		<div id="modal-cancle-btn">X</div> 
+			<form action="${path }/fileupload" method="post" enctype="multipart/form-data" id="form">
+				<!-- 이미지  -->
+				<img alt="a" src="${path}/image/icon/pictures.png" id="preview">
+				<div>
+					<input multiple="multiple" type="file" name="uploadfile" id="uploadfile">
+				</div>
+
+
+				<!-- 게시글 작성 -->
+				<div>
+					<input type="text" placeholder="설명을 입력하세요" id="content" name="content">
+				</div>
+
+				<!--전송 버튼  -->
+				<div id="btnwrapper">
+					<input type="submit" value="피드 게시"  id="uploadBtn">
+				</div>
+
+			</form> 
+			<!--  이미지 미리보기  -->
+		<script type="text/javascript">
+		$('#uploadfile').change(function(){
+		    setImageFromFile(this, '#preview');
+		});
+		function setImageFromFile(input, expression) {
+		    if (input.files && input.files[0]) {
+		        var reader = new FileReader();
+		        reader.onload = function (e) {
+		            $(expression).attr('src', e.target.result);
+		        }
+		        reader.readAsDataURL(input.files[0]);
+		    }
+		}
+		
+		</script>
+		</div> 
+		<div id="modal-cancle-area"></div> 
+	</div>
+
+	<script type="text/javascript">
+	$(function(){
+//	 	이미지 클릭시 해당 이미지 모달
+		$("#editnav").click(function(){
+			$("#modal-wrapper").show();
+	
+		});
+		
+		//.modal안에 button을 클릭하면 .modal닫기
+		$("#modal-cancle-btn").click(function(){
+			$("#modal-wrapper").hide();
+		});	
+	
+	});
+		
+	</script>

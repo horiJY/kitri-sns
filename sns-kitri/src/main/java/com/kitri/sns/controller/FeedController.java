@@ -3,6 +3,7 @@ package com.kitri.sns.controller;
 
 import java.util.List;
 import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.multipart.MultipartFile;
-
-
-import com.kitri.sns.post.service.PostImgService;
-import com.kitri.sns.post.service.PostImgService;
-import com.kitri.sns.post.vo.PostImgVO;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.kitri.sns.feed.service.FeedService;
 import com.kitri.sns.feed.vo.FeedVO;
 
@@ -28,12 +23,11 @@ public class FeedController {
 
   @GetMapping("")
   public String feedboard(HttpSession session, Map<String, String> map, Model model) {
-    // if (session.getAttribute("id") == null)
-    // return "login";
-    // map.put("loginid", session.getAttribute("id").toString());
-    map.put("loginid", "okh970526");
-    // map.put("loginid", "roses_are_rosie");
-    // map.put("loginid", "jennierubyjane");
+     if (session.getAttribute("id") == null)
+    	 return "login";
+     map.put("loginid", session.getAttribute("id").toString());
+     
+//    map.put("loginid", "okh970526");
     List<FeedVO> feedList = null;
     // 팔로잉_num check
     if (feedService.checkFollowing(map) > 0) { // 1 팔로잉_num>0
@@ -61,9 +55,9 @@ public class FeedController {
 
   @RequestMapping("/morelist")
   @ResponseBody
-  public List<FeedVO> moreList(String start, String end, Map<String, String> map) {
-    // map.put("loginid", session.getAttribute("id").toString());
-    map.put("loginid", "okh970526");
+  public List<FeedVO> moreList(HttpSession session, String start, String end, Map<String, String> map) {
+     map.put("loginid", session.getAttribute("id").toString());
+//    map.put("loginid", "okh970526");
     map.put("start", start);
     map.put("end", end);
     List<FeedVO> feedList = feedService.moreFollowFeeds(map);
