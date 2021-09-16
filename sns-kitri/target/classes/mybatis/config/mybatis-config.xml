@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- https://mybatis.org/mybatis-3/ko/index.html 사이트에서 설정을 가져오자 -->
-<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
 		<typeAlias alias="dm" type="com.kitri.sns.message.vo.MessageVO"/>
 		<typeAlias alias="dmsearch" type="com.kitri.sns.message.vo.MemberVO"/>
-		<typeAlias alias="postupload" type="com.kitri.sns.post.vo.PostImgVO" />
-		<typeAlias alias="member" type="com.kitri.sns.login.vo.MemberVO"/>
-		<typeAlias alias="feedVO" type="com.kitri.sns.feed.vo.FeedVO"/>
-		
 	</typeAliases>
-
 </configuration>
