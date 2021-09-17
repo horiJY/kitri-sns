@@ -4,9 +4,8 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<typeAliases>
-		<typeAlias alias="dm" type="com.kitri.sns.message.vo.MessageVO"/>
-	</typeAliases>
-	
-	
+   <typeAliases>
+      <typeAlias alias="dm" type="com.kitri.sns.message.vo.MessageVO"/>
+      <typeAlias alias="dmsearch" type="com.kitri.sns.message.vo.MemberVO"/>
+   </typeAliases>
 </configuration>

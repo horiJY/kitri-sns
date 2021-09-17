@@ -8,27 +8,29 @@
 		<result property="path" column="path" />
 		<result property="lastMsg" column="lastMsg" />
 	</resultMap>
-	<select id="selectList" resultMap="messageMap">
-		SELECT * FROM DM 
-		WHERE ID1 = #{senderId}
-		OR ID2 = #{senderId}
-		ORDER BY DAY DESC 
-	</select>
 	
-	<select id="selectMsgDetail" resultMap="messageMap">
+	<select id="selectList" resultMap="messageMap">
+      SELECT * FROM DM 
+      WHERE ID1 = #{senderId}
+      OR ID2 = #{senderId}
+      ORDER BY DAY ASC
+   </select>
+	
+	<select id="selectMsgDetail"  resultMap="messageMap">
 		SELECT * FROM ( 
 						SELECT * FROM DM 
-						WHERE ID1 IN (#{senderId}, #{receiverId})
+						WHERE ID1 IN ('${senderId}', '${receiverId}')
 						OR 
-						ID2 IN (#{senderId}, #{receiverId}) 
+						ID2 IN ('${senderId}', '${receiverId}') 
 						ORDER BY DAY DESC 
 						) 
 		<![CDATA[WHERE ROWNUM <= 3]]>
 	</select>
 
 	<insert id="insertMsg" parameterType="dm">
-		INSERT INTO DM(ID1, ID2, DAY, PATH, LASTMSG) VALUES (#{senderId},
-		#{receiverId}, TO_CHAR(SYSDATE,'YYYYMMDD'), #{path}, #{lastMsg})
+		INSERT INTO DM(ID1, ID2, DAY, PATH, LASTMSG)
+		VALUES ('${id1}','${id2}', SYSDATE, '${path}', '${lastMsg}')
+<!-- 		VALUES ('${id1}','${id2}', '$TO_CHAR(SYSDATE,'YYYYMMDD')', '${path}', '${lastMsg}') -->
 	</insert>
 	
 	<update id="updateMsg" parameterType="dm">

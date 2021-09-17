@@ -6,6 +6,10 @@ public class MessageDetailVO {
 	private String time;
 	private String msg;
 	
+	@Override
+	public String toString() {
+		return "MessageDetailVO [sender=" + sender + ", receiver=" + receiver + ", time=" + time + ", msg=" + msg + "]";
+	}
 	public String getSender() {
 		return sender;
 	}
