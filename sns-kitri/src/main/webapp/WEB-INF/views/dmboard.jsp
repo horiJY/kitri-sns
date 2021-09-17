@@ -479,7 +479,7 @@ h3 {
 //                "<p class='message'>"+chatvalues[3]+"</p>"+
 //                "<div class='timer'>"+chatvalues[2];+"</div>" 
             	$('.desc-contact').append(
-            			"<p class='name'>"+chatvalues[1]+"</p>"+
+            		 "<p class='name'>"+chatvalues[1]+"</p>"+
                      "<p class='message'>"+chatvalues[3]+"</p>"+
                      "<div class='timer'>"+chatvalues[2]+"</div>"
             	);
