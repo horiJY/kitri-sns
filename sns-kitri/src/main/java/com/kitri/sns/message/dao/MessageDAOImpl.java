@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kitri.sns.message.vo.FollowVO;
+import com.kitri.sns.message.vo.MemberVO;
 import com.kitri.sns.message.vo.MessageVO;
 
 @Repository
@@ -36,7 +37,7 @@ public class MessageDAOImpl implements MessageDAO{
 	}
 
 	@Override
-	public List<FollowVO> selectFollowList(String memberId) {
+	public List<MemberVO> selectFollowList(String memberId) {
 		return sqlSession.selectList("dmsearch.selectFollowList", memberId);
 	}
 

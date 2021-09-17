@@ -83,4 +83,19 @@
 		from post_feeds
 		where feed_id = ${feedid}
 	</select>
+	
+	<select id="selectMemberFeeds" resultMap="FeedMap">
+	<![CDATA[                                            
+		select MEMBER_ID, image_url, CONTENT, REG_DATE, LIKES
+		from (  select rownum RNUM, MEMBER_ID, image_url, CONTENT, REG_DATE, LIKES
+				from( select MEMBER_ID, image_url, CONTENT, TO_CHAR(reg_date, 'yy-MM-dd HH24:mi') as REG_DATE, LIKES
+                        from post_feeds 
+                        where member_id = '${id}' 
+                        order by reg_date desc
+                    ) A
+            )B
+		where B.RNUM BETWEEN ${start} AND ${end}
+	]]>
+	</select>
+	
 </mapper>

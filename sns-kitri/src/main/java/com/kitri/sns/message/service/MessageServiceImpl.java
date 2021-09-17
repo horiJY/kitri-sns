@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.kitri.sns.message.dao.MessageDAO;
 import com.kitri.sns.message.vo.FollowVO;
+import com.kitri.sns.message.vo.MemberVO;
 import com.kitri.sns.message.vo.MessageVO;
 
 @Service
@@ -37,7 +38,7 @@ public class MessageServiceImpl implements MessageService{
 	}
 
 	@Override
-	public List<FollowVO> selectFollowList(String memberId) {
+	public List<MemberVO> selectFollowList(String memberId) {
 		return messageDAO.selectFollowList(memberId);
 	}
 }

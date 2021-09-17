@@ -14,4 +14,9 @@
 		INSERT INTO POST_FEEDS (FEED_ID,MEMBER_ID,IMAGE_URL,CONTENT,REG_DATE,LIKES)
 		VALUES ( (select count(*)+1 from post_feeds),'${loginid}','${uploadfilepaths}','${content}',sysdate, 0)
 	</insert>
+	
+	<select id="selectFeedCnt" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM POST_FEEDS 
+		WHERE MEMBER_ID = #{id}
+	</select>
 </mapper>

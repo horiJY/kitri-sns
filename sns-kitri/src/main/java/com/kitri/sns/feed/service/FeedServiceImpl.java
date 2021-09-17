@@ -35,4 +35,9 @@ public class FeedServiceImpl implements FeedService {
   public int putFeedLike(Map<String, String> map) {
     return feedDao.updateFeedLike(map);
   }
+
+	@Override
+	public List getMemberFeeds(Map<String, String> map) {
+		return feedDao.getMemberFeeds(map);
+	}
 }
