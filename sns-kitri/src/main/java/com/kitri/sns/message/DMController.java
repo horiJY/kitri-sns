@@ -29,122 +29,130 @@ import com.kitri.sns.message.vo.MessageVO;
 @Controller
 @RequestMapping("/message")
 public class DMController {
-	@Autowired
-	private MessageService msgService;
+   @Autowired
+   private MessageService msgService;
 
-	@RequestMapping("/list")
-	public String DMList(Model model) {
-		String senderId = "jennierubyjane";
+   @RequestMapping("/list")
+   public String DMList(Model model) {
+      String senderId = "jennierubyjane";
 
-		// 들어온 dmList 값 시간 순 정렬해주기
-		List<MessageVO> dmList = msgService.selectMsgList(senderId);
+      // 들어온 dmList 값 시간 순 정렬해주기
+      List<MessageVO> dmList = msgService.selectMsgList(senderId);
 
-		JSONObject jsonObj = new JSONObject();
+      JSONObject jsonObj = new JSONObject();
 
-		for (int i = 0; i < dmList.size(); i++) {
-			JSONArray jsonArr = new JSONArray();
+      for (int i = 0; i < dmList.size(); i++) {
+         JSONArray jsonArr = new JSONArray();
 
-			jsonArr.add(dmList.get(i).getId1());
-			jsonArr.add(dmList.get(i).getId2());
-			jsonArr.add(dmList.get(i).getDay());
-//			jsonArr.add(dmList.get(i).getPath());
-			jsonArr.add(dmList.get(i).getLastMsg());
+         jsonArr.add(dmList.get(i).getId1());
+         jsonArr.add(dmList.get(i).getId2());
+         jsonArr.add(dmList.get(i).getDay());
+//         jsonArr.add(dmList.get(i).getPath());
+         jsonArr.add(dmList.get(i).getLastMsg());
 
-			if ((dmList.get(i).getId1()).equals(senderId)) {
-				if (!jsonObj.containsKey(dmList.get(i).getId2())) {
-					jsonObj.put(dmList.get(i).getId2(), jsonArr);
-				}
-			} else {
-				if (!jsonObj.containsKey(dmList.get(i).getId1())) {
-					jsonObj.put(dmList.get(i).getId1(), jsonArr);
-				}
-			}
-		}
-		model.addAttribute("dmList", jsonObj.toString());
-		return "dmboard";
-	}
+         if ((dmList.get(i).getId1()).equals(senderId)) {
+            if (!jsonObj.containsKey(dmList.get(i).getId2())) {
+               jsonObj.put(dmList.get(i).getId2(), jsonArr);
+            }
+         } else {
+            if (!jsonObj.containsKey(dmList.get(i).getId1())) {
+               jsonObj.put(dmList.get(i).getId1(), jsonArr);
+            }
+         }
+      }
+      model.addAttribute("dmList", jsonObj.toString());
+      return "dmboard";
+   }
 
-	@RequestMapping("/detail")
-	@ResponseBody
-	public List<MessageDetailVO> DMDetail(String senderId, String receiverId, String day) throws Exception {
+   @RequestMapping(value="/detail", method=RequestMethod.POST)
+   @ResponseBody
+   public List<MessageDetailVO> DMDetail(String senderId, String receiverId, String day) throws Exception {
 
-//		String senderId = mvo.getId1();
-//		String receiverId = mvo.getId2();
-//		String day = mvo.getDay();
-		String path = "C:\\Users\\kitri\\git\\kitri-sns\\sns-kitri\\src\\main\\webapp\\resources\\dmfile";
+//      String senderId = mvo.getId1();
+//      String receiverId = mvo.getId2();
+//      String day = mvo.getDay();
+	  senderId = "bn_sj2013";
+	  receiverId = "jennierubyjane";
+	  day ="210913";
+      String path = "C:\\Users\\kitri\\git\\kitri-sns\\sns-kitri\\src\\main\\webapp\\resources\\dmfile";
 
-		String path1 = path + File.separator + senderId + "-" + receiverId + "-" + day + ".txt";
-		String path2 = path + File.separator + receiverId + "-" + senderId + "-" + day + ".txt";
+      String path1 = path + File.separator + senderId + "-" + receiverId + "-" + day + ".txt";
+      System.out.println(path1);
+      String path2 = path + File.separator + receiverId + "-" + senderId + "-" + day + ".txt";
+      
+      File file = new File(path1);
+      File file2 = new File(path2);
+      int insertResult = 0;
+      
+      Map<String, String> map = new HashMap<>();
+//      map.put("id1", senderId);
+//      map.put("id2", receiverId);
+      map.put("senderId", senderId);
+      map.put("receiverId", receiverId);
+      
+      List<MessageVO> msgList = msgService.selectMessageDetail(map);
+      
+      if (!file.exists() && !file2.exists()) {
+         String lastMsg = "";
 
-		File file = new File(path1);
-		File file2 = new File(path2);
-		int insertResult = 0;
-		
-		Map<String, String> map = new HashMap<>();
-		map.put("id1", senderId);
-		map.put("id2", receiverId);
-		
-		List<MessageVO> msgList = msgService.selectMessageDetail(map);
-		
-		if (!file.exists() && !file2.exists()) {
-			String lastMsg = "";
+         MessageVO mvo = new MessageVO();
+         mvo.setId1(senderId);// bn_sj2013
+         mvo.setId2(receiverId);// jennierubyjane
+         mvo.setPath(path1);
+         mvo.setLastMsg(lastMsg);
+         insertResult = msgService.insertMessage(mvo);
 
-			MessageVO mvo = new MessageVO();
-			mvo.setId1(senderId);
-			mvo.setId2(receiverId);
-			mvo.setPath(path1);
-			mvo.setLastMsg(lastMsg);
-			insertResult = msgService.insertMessage(mvo);
+         if (insertResult != 0) {
+            file.createNewFile();
+         } 
+      }else {
+         path1 = msgList.get(0).getPath();
+      }
+      
+      msgList = msgService.selectMessageDetail(map);
+      List<MessageDetailVO> msgDetail = new ArrayList<MessageDetailVO>();
+      JSONParser parser = new JSONParser();
+      for (int i = 0; i < msgList.size(); i++) {
+         BufferedReader read = null;
+         if (!file.exists() && file2.exists()) {
+            read = new BufferedReader(new FileReader(msgList.get(i).getPath()));
+         } else if(file.exists() && !file2.exists()){
+            read = new BufferedReader(new FileReader(msgList.get(i).getPath()));
+         }
+         
+         String line = "";
+         
+         while ((line = read.readLine()) != null) {
+            if(!line.trim().equals("")) {
+               
+            MessageDetailVO mdvo = new MessageDetailVO();
+            Object obj = parser.parse(line);
+            
+            JSONObject jsonObject = (JSONObject) obj;
 
-			if (insertResult != 0) {
-				file.createNewFile();
-			} 
-		}else {
-			path1 = msgList.get(0).getPath();
-		}
-		
-		msgList = msgService.selectMessageDetail(map);
-		List<MessageDetailVO> msgDetail = new ArrayList<MessageDetailVO>();
-		JSONParser parser = new JSONParser();
-		for (int i = 0; i < msgList.size(); i++) {
-			BufferedReader read = null;
-			if (!file.exists() && file2.exists()) {
-				read = new BufferedReader(new FileReader(msgList.get(i).getPath()));
-			} else if(file.exists() && !file2.exists()){
-				read = new BufferedReader(new FileReader(msgList.get(i).getPath()));
-			}
-			
-			String line = "";
-			
-			while ((line = read.readLine()) != null) {
-				if(!line.trim().equals("")) {
-					
-				MessageDetailVO mdvo = new MessageDetailVO();
-				Object obj = parser.parse(line);
-				
-				JSONObject jsonObject = (JSONObject) obj;
+            mdvo.setSender((String) jsonObject.get("senderId"));
+            mdvo.setReceiver((String) jsonObject.get("receiverId"));
+            mdvo.setTime((String) jsonObject.get("time"));
+            mdvo.setMsg((String) jsonObject.get("msg"));
 
-				mdvo.setSender((String) jsonObject.get("senderId"));
-				mdvo.setReceiver((String) jsonObject.get("receiverId"));
-				mdvo.setTime((String) jsonObject.get("time"));
-				mdvo.setMsg((String) jsonObject.get("msg"));
+            msgDetail.add(mdvo);
+            
+            }
+         }
+      }
+      //for(MessageDetailVO c:msgDetail) {
+      //	  System.out.println(c);
+      //	}
+      return msgDetail;
+   }
 
-				msgDetail.add(mdvo);
-				
-				}
-			}
-		}
-		
-		return msgDetail;
-	}
+   @RequestMapping(value="/dmsearch",method = RequestMethod.GET, produces="text/plain;charset=UTF-8")
+   @ResponseBody
+   public String DMSearch(String memberId) {
 
-	@RequestMapping(value="/dmsearch",method = RequestMethod.GET, produces="text/plain;charset=UTF-8")
-	@ResponseBody
-	public String DMSearch(String memberId) {
+      List<MemberVO> followList = msgService.selectFollowList(memberId);
+      Gson gson = new Gson();
 
-		List<MemberVO> followList = msgService.selectFollowList("jennierubyjane");
-		Gson gson = new Gson();
-
-		return gson.toJson(followList);
-	}
+      return gson.toJson(followList);
+   }
 }
