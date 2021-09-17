@@ -422,7 +422,7 @@ h3 {
 </style>
 <script>
     $(document).ready(function(){
-       $('.chat').hide();
+      $('.chat').hide();
       $('.leftsearchbar').hide(); 
       $('.leftdiscussion').show();
         

@@ -5,6 +5,59 @@ body {
 	margin: 0px auto;
 	max-width: 1200px;
 }
+#infowrapper{
+   margin: auto;
+   width: 95%;
+   max-width: 935px;
+   height:25%;
+   max-height: 150px;
+   margin-top: 50px;
+   display: flex;
+   align-items: center;
+    justify-content: center;
+}
+
+#memberbigthumnail{
+	width:40%;
+	max-width:150px;
+	height: 100%;
+	max-width: 150px;
+    margin-right: 10%;
+}
+#memberbigthumnail>img {
+   border-radius: 50%;
+}
+
+#memberinfowrapper{
+    width: 33%;
+}
+
+#infomemberid{
+	font-size: xx-large;
+    font-weight: 100;
+}
+
+#cntwrapper{
+	width: 100%;
+    height: 100%;
+    justify-content: space-between;
+    display: flex;
+    font-size: medium;
+    font-weight: 600;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+#name{
+    font-weight: bold;
+}
+
+#introduce{
+	width:100%;
+	height:auto;
+	margin-top: 5%;
+}
+
 
 #feedList {
 	margin: auto;
@@ -93,25 +146,27 @@ img {
 }
 </style>
 
-<script type="text/javascript">
-	console.log('${infoList}');
-	console.log('${infoList.memberId}');
-</script>
 <div>
 <%-- 	<c:set value="${infoList}" var="infoList" /> --%>
-	<div>이미지 자리</div>
-	<div>
-		<div id="memberid">${infoList.memberId }</div>
-		<div>
-			<div id="feednum">게시물 ${infoList.feedsCnt }</div>
-			<div id="followernum">팔로워 ${infoList.follower }</div>
-			<div id="followingnum">팔로우 ${infoList.following }</div>
+	<div id="infowrapper">
+		<div id="memberbigthumnail"><img src="${path}/image/members/${infoList.memberId}/thumnail.jpg"></div>
+		<div id="memberinfowrapper">
+			<div id="infomemberid">${infoList.memberId }</div>
+			<div id="cntwrapper">
+				<div id="feednum">게시물 ${infoList.feedsCnt }</div>
+				<div id="followernum">팔로워 ${infoList.follower }</div>
+				<div id="followingnum">팔로우 ${infoList.following }</div>
+			</div>
+			<div id="name">${infoList.name }</div>
+			<div id="introduce">${infoList.introduce }</div>
 		</div>
-		<div id="name">${infoList.name }</div>
-		<div id="introduce">${infoList.introduce }</div>
 	</div>
 </div>
 
+<hr style="margin-top: 5%; border-bottom-width: thick;">
+<script type="text/javascript">
+	console.log('${feedList}');
+</script>
 <div id="feedList">
 	<c:forEach items="${feedList}" var="feedvo">
 		<div class="feedwrapper">

@@ -78,7 +78,8 @@
 								},
 								autofocus: true,
 								select: function (event, ui) {
-									$("#search").val(ui.item.value);
+									var pickmember = $("#search").val(ui.item.value).val();
+									window.location.href = '${path}/detail/'+pickmember;
 									return false;
 								},
 								position: { my: 'right top', at: 'right bottom' },

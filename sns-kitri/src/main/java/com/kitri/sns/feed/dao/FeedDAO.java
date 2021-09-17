@@ -7,17 +7,19 @@ import com.kitri.sns.feed.vo.ReplyVO;
 
 public interface FeedDAO {
 
-  public int getFollowingNum(Map<String, String> map);
+  public int selectFollowingNum(Map<String, String> map);
 
-  public List<FeedVO> getFollowFeeds(Map<String, String> map);
+  public List<FeedVO> selectFollowFeeds(Map<String, String> map);
 
-  public List<FeedVO> getRandomFeeds(Map<String, String> map);
+  public List<FeedVO> selectRandomFeeds(Map<String, String> map);
 
-  public List<FeedVO> getMoreFeeds(Map<String, String> map);
+  public List<FeedVO> selectMoreFeeds(Map<String, String> map);
 
   public int updateFeedLike(Map<String, String> map);
-  
-  public List<FeedVO> getMemberFeeds(Map<String, String>map);
+
+  public List<FeedVO> selectMemberFeeds(Map<String, String> map);
 
   public List<ReplyVO> selectFeedReplys(int feedId);
+
+  public List<FeedVO> selectMemberDetailFeeds(Map<String, String> map);
 }

@@ -2,6 +2,7 @@ package com.kitri.sns.feed.service;
 
 import java.util.List;
 import java.util.Map;
+import com.kitri.sns.feed.vo.FeedVO;
 
 public interface FeedService {
   // 팔로잉체크
@@ -17,9 +18,11 @@ public interface FeedService {
   public List getRandomFeeds(Map<String, String> map);
 
   public int putFeedLike(Map<String, String> map);
-  
-  public List getMemberFeeds(Map<String, String>map);
+
+  public List getMemberFeeds(Map<String, String> map);
 
   public List getFeedReplys(int feedId);
+
+  public List<FeedVO> getMemberDetailFeeds(Map<String, String> map);
 
 }

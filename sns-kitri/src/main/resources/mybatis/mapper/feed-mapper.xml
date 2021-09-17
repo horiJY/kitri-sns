@@ -98,6 +98,13 @@
 	]]>
 	</select>
 	
+	<select id="selectMemberDetailFeeds" resultMap="FeedMap">
+		select FEED_ID, MEMBER_ID, image_url, CONTENT, TO_CHAR(reg_date, 'yy-MM-dd HH24:mi') as REG_DATE, LIKES
+		from post_feeds 
+		where member_id = '${id}' 
+		order by reg_date desc
+	</select>
+	
 	<select id="selectFeedReplys" parameterType="int" resultType="replyVO">
 		select MEMBER_ID,SEQ_NO,REPLY,TO_CHAR(REG_DATE,'yy-MM-dd HH24:mi') reg_date
 		from feed_replys
