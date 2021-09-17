@@ -35,4 +35,10 @@
 	FROM MEMBERS
 	ORDER BY MEMBER_ID
 	</select>
+	
+	<select id="selectMemberInfo" resultMap="memberMap">
+		SELECT NAME, INTRODUCE, FOLLOWER_NUM, FOLLOWING_NUM 
+		FROM MEMBERS
+		WHERE MEMBER_ID = #{id}
+	</select>
 </mapper>

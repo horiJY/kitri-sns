@@ -22,4 +22,8 @@ public class PostImgDAO{
 	public String selectPostId(Map<String,String> map) {
 		return sqlSession.selectOne("postupload.selectPostId",map);
 	}
+	
+	public int memberFeedsCnt(String id) {
+		return sqlSession.selectOne("postupload.selectFeedCnt", id);
+	}
 }

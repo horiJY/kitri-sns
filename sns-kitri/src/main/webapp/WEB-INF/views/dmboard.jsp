@@ -114,7 +114,8 @@ body {
    color: #515151;
 }
 
-.timer {
+.desc-contact.timer {
+   float:right;
    margin-left: 15%;
    font-family: 'Open Sans', sans-serif;
    font-size: 11px;
@@ -420,18 +421,19 @@ h3 {
 </style>
 
 <script>
+
     $(document).ready(function(){
        $('.chat').hide();
       $('.leftsearchbar').hide(); 
       $('.leftdiscussion').show();
         
       //나의 id
-        var myId = "roses_are_rosie";
+        var myId = "jennierubyjane";
         $('.my-id').html;
         $('.my-id').append(myId);
         
         var dmList = '${dmList}';
-        console.log(dmList);
+       console.log(dmList);
         
         
         const obj = JSON.parse(dmList);
@@ -441,10 +443,11 @@ h3 {
        //현제 날짜 체크
        let today = new Date();   
 
-      let year = today.getFullYear(); // 년도
+      let years = today.getFullYear(); // 년도
       let month = today.getMonth() + 1;  // 월
       let date = today.getDate();  // 날짜
       let day = today.getDay();  // 요일
+      let year = years-2000;
       if(month<10){
          month = "0"+month;
       }
@@ -452,64 +455,56 @@ h3 {
          month = "0"+date;
       }
       let todayDate = (year +  month +  date);
-      console.log(todayDate);
+      //console.log(todayDate);
       
       
       
-        //키값만 추출
-          var name = Object.keys(obj);
+      
+        //KEY값만 추출
+          var key = Object.keys(obj);
           var value = Object.values(obj);
         
-        //키 개수
-        var keylength = name.length;
-        console.log(name.length);
-
-        for(var i=0; i<name.length; i++){
-            if(myId == name[i]){
-            console.log(name[i]);
-            //const value = obj.$('myId');
-            var valuess = value[i];
-            console.log(valuess[0]);
-            console.log(valuess[1]);
-            console.log(valuess[2]);
-            console.log(valuess[3]);
-            
-            }else{
-               
-            }
-        }
-
-
-        
-        
-        
-        
-        console.log(obj.bn_sj2013);
-        console.log(obj.bn_sj2013.length);
-        //console.log(obj.bn_sj2013[0]);
-        
-        //obj.appendChild()
-        
-       //key값과 myid비교
-       //value값에 index
-       //순서대로 뿌리기
-              
-      //});
-       
-//        JSON.parse('${dmList}', (key, value) => {
-   
-//             console.log(key); 
-//             console.log(value);    
-//           });
+        //KEY 개수
+        //console.log(name.length);
       
+        console.log(key.length);
+        //왼쪽 채팅 리스트
+        for(var i=0; i<key.length; i++){
+           var chatvalues = value[i];
+           console.log(chatvalues);
+          
+            if(myId == chatvalues[0]){
+//                lastchat =
+//                "<p class='name'>"+chatvalues[1]+"</p>"+
+//                "<p class='message'>"+chatvalues[3]+"</p>"+
+//                "<div class='timer'>"+chatvalues[2];+"</div>" 
+            	$('.desc-contact').append(
+            		 "<p class='name'>"+chatvalues[1]+"</p>"+
+                     "<p class='message'>"+chatvalues[3]+"</p>"+
+                     "<div class='timer'>"+chatvalues[2]+"</div>"
+            	);
 
+            }else if(myId == chatvalues[1]){
+               lastchat =
+//             "<p class='name'>"+chatvalues[0]+"</p>"+
+//             "<p class='message'>"+chatvalues[3]+"</p>"+
+//             "<div class='timer'>"+chatvalues[2];+"</div>"  
+            $('.desc-contact').append(
+        			"<p class='name'>"+chatvalues[1]+"</p>"+
+                 "<p class='message'>"+chatvalues[3]+"</p>"+
+                 "<div class='timer'>"+chatvalues[2]+"</div>"
+        	);
+               }
+               
+//             $('.desc-contact').append(lastchat);
+         }
         
-/*        
+        
       //메세지 보내기 누를 때
-        $('.button').on("click", function(){
-           $('.leftdiscussion').empty();
-           $('.chat').empty();
-           $('.leftsearchbar').show();
+        $('.button').on("click", function(){           
+         $('.leftdiscussion').hide();
+         $('.chat').hide();
+         $('.leftsearchbar').show();
            
            
            
@@ -517,178 +512,113 @@ h3 {
         
         
         
+
        //위에 메세지 icon 누를 때
         $('.icon-message').on("click", function(){
             $('.leftdiscussion').hide();
             $('.chat').hide();
-           var aa = document.getElementsByClassName('leftdiscussion');
-              while(aa.section) {
-              aa.removeChild(aa.section);
-           }
-            var aa = document.getElementsByClassName('chat');
-              while(aa.section) {
-              aa.removeChild(aa.section);
-           }
-           $('.leftsearchbar').show();
+              $('.leftsearchbar').show();
            
-           
-           $.ajax({
-        		type : 'get',
-        		url: '${path }/dmsearch',
-        		data : {'memberId' : myID},
-        		dataType : 'json',
-        		success : function(data) {
-        			var usersource = new Array();
-        			$.each(data, function(idx, obj) {
-        				var user = new Object();
-        				user.value = obj.id;
-        				user.name = obj.name;
-        				usersource.push(user);
-        			});
-        			$( "#search" ).autocomplete({
-        				minLength: 1,
-        				source: usersource,
-        				focus: function( event, ui ) {
-        			 		$( "#search" ).val( ui.item.value );
-        				 	return false;
-        				},
-        				autofocus: true,
-        				select: function( event, ui ) {
-        					$( "#search" ).val( ui.item.value );
-        				 	return false;
-        				},
-        				position : { my : 'right top', at : 'right bottom'},
-        				disable : false, // 해당 값 true 시, 자동완성 기능 꺼짐
-        			})
-        			.autocomplete( "instance" )._renderItem = function( ul, item ) {
-        				return $( "<li class='searchlist'>" )
-        				.append( "<div class='searchitem'>"
-        						+ "<img src='${path}/image/members/" + item.value + "/thumnail.jpg'>" 
-        						+ "<div class='user'><span class='searchid'>" + item.value + "</span><br>" 
-        						+ "<span class='searchname'>" + item.name + "</span><div>" 
-        						+ "</div>" )
-        				.appendTo( ul );
-        			};
-        		}
-        	});
            
         });
-       
-              
+                   
+
         //채팅창 누를때
         $('.desc-contact').on("click", function(){
           $('.leftdiscussion').hide();
           $('.leftsearchbar').hide();
           $('.chat').show();
           
-          let senderId="";
-          let reveiverId="";
+          //왼쪽 채팅창 아이디
+          var reveiverId = $(this).children().first().text();
+          //senderId=bn_sj2013&receiverId=jennierubyjane&day=210913
           
+           
              $.ajax({
                  url:"http://localhost:8080/sns/message/detail",
                  type:"post",
-                 data:{"senderId" : senderId, "reveiverId" : reveiverId},
+                 data:{"senderId" : myId, "receiverId" : reveiverId, "day" : todayDate-4},
                  dataType:"json",
-                   success:function(data){
-                    for(let i=0; i<data.length; i++){
-                        let senderId = "${senderId}";
-                        if(myId.equals(senderId)){
-                       
-                           //날짜 체크
-                           let dataDate = "";
-
-                           let today = new Date();   
-                           let year = today.getFullYear(); // 년도
-                          let month = today.getMonth() + 1;  // 월
-                          if(month<10){
-                             var month = "0"+month;
-                             console.log(month);
-                          }
-                           let date = today.getDate();  // 날짜
-                           let todayDate = (year + month + date);
- 
-                       
-                           //채팅창에 날짜가 다를 때
-                           if(!datadate.equals(todayDate)){
-                              let leftDiscussion="";
-                              for(let i=0; i<data.length; i++){
-                                 leftDiscussion += "<hr>"+"<div class='chat_header'>"+
-                                       "<img class='photo' style='background-image: url();'/>"+
-                                       "<hr class='chat_status'/></div>"+
-                                       "<div class='chat_s'>"+
-                                       //보내는 사람
-                                       "<div class='id-1'><div class='chat_id-1'>"+${data[i].msg}+"</div>"+
-                                       "<span class='message-time-id1'>"+${data[i].time}+"</span></div>"
-                                       //받는 사람
-                                       "<div class='id-2'>"+"<div class='chat_id-1'>"+${data[i].msg}+"</div>"+
-                                       "<span class='message-time-id2'>"+${data[i].time}+"</span></div>"
-                                 }
-                              var params = {   
-                                    sender : $("myid").val,
-                                    reveiver : $("name").val,
-                                    time : $("timer").val,
-                                    msg : $("message").val
-                                 }
-                              $.ajax({
-                                    type : "POST",
-                                    url : "",
-                                    data : params,
-                                    success : function(res){ 
-                                    alert(res.code);
-                                 },
-                                 error : function(XMLHttpRequest, textStatus, errorThrown){
-                                 alert("통신 실패.")
-                                 }
-                              });
-
-                           //채팅창에 날짜가 같을 때
-                           }else{
-                              leftdiscussion += +"<div class='chat_header'>"+
-                              "<img class='photo' style='background-image: url();'/>"+
-                              "<hr class='chat_status'/></div>"+
-                              "<div class='chat_s'>"+
-                              //보내는 사람
-                              "<div class='id-1'>"+"<div class='chat_id-1'>"+${data[i].msg}+"</div>"+
-                              "<span class='message-time-id1'>"+${data[i].time}+"</span></div>"
-                              //받는 사람
-                              "<div class='id-2'>"+"<div class='chat_id-1'>"+${data[i].msg}+"</div>"+
-                              "<span class='message-time-id2'>"+${data[i].time}+"</span></div>"
-                       
-                              var params = {
-                                    sender : $("myid").val,
-                                    reveiver : $("name").val,
-                                    time : $("timer").val,
-                                    msg : $("message").val,
-                              }
-                              $.ajax({
-                                 type : "POST",
-                                 url : "http://localhost:8080/sns-kitri/message/detail",
-                                 data : params,
-                                 success : function(res){ 
-                                 alert(res.code);
-                              },
-                              error : function(XMLHttpRequest, textStatus, errorThrown){
-                              alert("통신 실패.")
-                              }
-                           });  
-                        }
-                        $('.let-discussion').addClass(chat_header);
-                        }
-                        },
-                        });
-                        });
-                        });
-                    }
-                 }         
-          });
-        });
-
-        
-*/        
+                 success:function(data){
+                       //0: {sender: "bn_sj2013", receiver: "jennierubyjane", time: "20210914 13:21:33", msg: "^^"}
+                       //1: {sender: "jennierubyjane", receiver: "bn_sj2013", time: "20210915 08:21:33", msg: "TEST0915오전8시"}
+                         for(var i=0; i<data.length; i++){
+                            //시간값 자르기
+                            var time = data[i].time;
+                            var Stime = time.substring(9,14);
+                            
+                            //myId=sender일때 채팅창
+                            if(myId==data[i].sender){
+                              chat = 
+                              "<div class='id-1'>"+
+                                "<div class='chat_id-1'>"+data[i].msg+"</div>"+
+                                "<span class='message-time-id1'>"+Stime+"</span>"+
+                             "</div>"
+                               //myId=sender일때 채팅추가         
+                               $('.chat_s').append(chat);
+                            }
+                            //!myId=sender
+                            else{
+                             chat1 =
+                             "<div class='id-2'>"+
+                               "<div class='chat_id-2'>"+data[i].msg+"</div>"+
+                               "<span class='message-time'>"+Stime+"</span>"+
+                            "</div>"
+                            $('.chat_s').append(chat1);
+                            }
+                         }
+                         
+                      }
+                   });          
+         
+         
+               });
+    
         
         
         
-   });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    });
     
 
 
@@ -707,19 +637,21 @@ h3 {
                         <a class="my-id"></a>
                         <a class="icon-message">💬</a>
                     </div>
+                    
                     <!-- <div class="discussion message-active"> -->
-               
-               <div class="discussion">
-                  <div class="photo"
-                     style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">
-                  </div>
+                  <div class="discussion">
+                     <div class="photo"
+                        style="background-image: url(https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);">
+                     </div>
+                     
                   <div class="desc-contact">
-                     <p class="name"></p>
-                     <p class="message"></p>
+                  <!--                      
+                     <p class="name">aa</p>
+                     <p class="message">aa</p>
+                     <div class="timer">aa</div> 
+                  -->
                   </div>
-                  <div class="timer"></div>
-               </div>
-
+                  </div>
                 </section>
                 
 
@@ -745,48 +677,52 @@ h3 {
                   <hr class="chat_status"/>
                </div>
                <div class="chat_s">
-                  <div class="id-1">
-                     <div class="chat_id-1">Hi</div>
-                     <span class="message-time-id1">11:11</span>
-                  </div>
-                  <div class="id-2">
-                     <div class="chat_id-2">Sure</div>
-                     <span class="message-time">11:12</span>
-                  </div>
-                  <div class="id-1">
-                     <div class="chat_id-1">Hi</div>
-                     <span class="message-time">11:11</span>
-                  </div>
-                  <div class="id-2">
-                     <div class="chat_id-2">Sure</div>
-                     <span class="message-time">11:12</span>
-                  </div>
-                  <div class="id-1">
-                     <div class="chat_id-1">Hi</div>
-                     <span class="message-time">11:11</span>
-                  </div>
-                  <div class="id-2">
-                     <div class="chat_id-2">Sure</div>
-                     <span class="message-time">11:11</span>
-                  </div>
-                  <div class="id-2">
-                     <div class="chat_id-2">Sure</div>
-                     <span class="message-time">11:11</span>
-                  </div>
-                  <div class="id-2">
-                     <div class="chat_id-2">Sure</div>
-                     <span class="message-time">11:11</span>
-                  </div>
-                  <div class="id-2">
-                     <div class="chat_id-2">Sure</div>
-                     <span class="message-time">11:11</span>
-                  </div>
+                  <!-- 채팅 말 풍선 -->
                </div>
                <div class="chat_input">
                   <input placeholder="Type here..." class="chat_text" onkeypress="if(event.keyCode === 13){add()}">
                   <button onclick="add()" class="chat_submit"></button>
                </div>
             </section>
+            
+            <!-- 채팅 엔터키 -->
+            <script>
+            //현재 시간 표시
+            var nowtime = new Date();
+            var hours = ('0' + nowtime.getHours()).slice(-2); 
+            var minutes = ('0' + nowtime.getMinutes()).slice(-2);
+            var timenow = hours + ':' + minutes;
+            document.getElementsByClassName('message-time-id1').value = timenow;
+            var addment = document.getElementsByClassName('chat_text').value;
+            //console.log(addment);
+            
+              function add() {
+                   document.getElementsByClassName('chat_s')[0].innerHTML += '<div class="chat_id-1">' + document.getElementsByClassName('chat_text')[0].value + '</div>'
+                   document.getElementsByClassName('chat_s')[0].innerHTML += "<span class='message-time-id1'>"+document.getElementsByClassName('message-time-id1').value+"</span>"
+                 }
+              function add() {
+                 document.getElementsByClassName('chat_s')[0].innerHTML +=
+                 '<div class="id-1"> <div class="chat_id-1">'
+                 + document.getElementsByClassName('chat_text')[0].value
+                 + document.getElementsByClassName('message-time-id1').value
+                 +'</div>'
+              }
+              
+              $('.chat_submit').on("click", function(){
+                 $.ajax({
+                       url:"http://localhost:8080/sns/message/detail",
+                       type:"get",
+                       data:{"senderId" : myId, "receiverId" : reveiverId, "time" : time, "msg" : msg},
+                       dataType:"json",
+                       success:function(data){
+                        
+                               
+                            }
+                      }); 
+              });
+              
+              
+            </script>
             
          <!-- 왼쪽 검색창 -->
             <section class="leftsearchbar">
