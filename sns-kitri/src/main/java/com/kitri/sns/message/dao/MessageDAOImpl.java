@@ -33,7 +33,6 @@ public class MessageDAOImpl implements MessageDAO{
 
    @Override
    public int insertMsg(MessageVO mvo) {
-	   System.out.println("dao 내부 mvo : "+mvo.toString());
       return sqlSession.insert("dm.insertMsg", mvo);
    }
 

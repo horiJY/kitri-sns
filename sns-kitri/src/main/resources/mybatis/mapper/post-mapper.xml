@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="postupload">
+
+	<select id="selectPostId" resultType="String">
+		SELECT feed_id
+		FROM POST_FEEDS
+		WHERE MEMBER_ID = '${loginid}'
+		and IMAGE_URL like '${uploadfilepaths}'
+		and CONTENT = '${content}'
+	</select>
+
+	<insert id="insertPost" parameterType="postupload">
+		INSERT INTO POST_FEEDS (FEED_ID,MEMBER_ID,IMAGE_URL,CONTENT,REG_DATE,LIKES)
+		VALUES ( (select count(*)+1 from post_feeds),'${loginid}','${uploadfilepaths}','${content}',sysdate, 0)
+	</insert>
+</mapper>

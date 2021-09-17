@@ -10,11 +10,11 @@
 	</resultMap>
 	
 	<select id="selectList" resultMap="messageMap">
-      SELECT * FROM DM 
-      WHERE ID1 = #{senderId}
-      OR ID2 = #{senderId}
-      ORDER BY DAY ASC
-   </select>
+		SELECT * FROM DM 
+		WHERE ID1 = #{senderId}
+		OR ID2 = #{senderId}
+		ORDER BY DAY DESC
+	</select>
 	
 	<select id="selectMsgDetail"  resultMap="messageMap">
 		SELECT * FROM ( 
@@ -24,6 +24,14 @@
 						ID2 IN ('${senderId}', '${receiverId}') 
 						ORDER BY DAY DESC 
 						) 
+                		<!-- WHERE (ID1 = #{id1}
+               					AND 
+                				ID2 = #{id2})
+                		OR(		ID1 = #{id2}
+               					AND 
+                				ID2 = #{id1})
+                		ORDER BY DAY DESC 
+                		)  -->
 		<![CDATA[WHERE ROWNUM <= 3]]>
 	</select>
 
@@ -31,6 +39,8 @@
 		INSERT INTO DM(ID1, ID2, DAY, PATH, LASTMSG)
 		VALUES ('${id1}','${id2}', SYSDATE, '${path}', '${lastMsg}')
 <!-- 		VALUES ('${id1}','${id2}', '$TO_CHAR(SYSDATE,'YYYYMMDD')', '${path}', '${lastMsg}') -->
+		<!-- INSERT INTO DM(ID1, ID2, DAY, PATH, LASTMSG) 
+		VALUES (#{id1}, #{id2}, SYSDATE, #{path}, #{lastMsg}) -->
 	</insert>
 	
 	<update id="updateMsg" parameterType="dm">
