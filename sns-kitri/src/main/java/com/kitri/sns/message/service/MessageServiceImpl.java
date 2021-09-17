@@ -42,3 +42,4 @@ public class MessageServiceImpl implements MessageService{
       return messageDAO.selectFollowList(memberId);
    }
 }
+

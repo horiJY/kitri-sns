@@ -13,6 +13,7 @@ import com.kitri.sns.message.vo.MessageVO;
 
 @Repository
 public class MessageDAOImpl implements MessageDAO{
+
    @Autowired
    private SqlSession sqlSession;
    

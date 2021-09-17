@@ -17,6 +17,8 @@ public interface FeedService {
   public List getRandomFeeds(Map<String, String> map);
 
   public int putFeedLike(Map<String, String> map);
+  
+  public List getMemberFeeds(Map<String, String>map);
 
   public List getFeedReplys(int feedId);
 

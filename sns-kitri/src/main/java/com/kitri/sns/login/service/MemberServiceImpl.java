@@ -1,6 +1,7 @@
 package com.kitri.sns.login.service;
 
 import java.security.MessageDigest;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,11 @@ public class MemberServiceImpl implements MemberService{
 		} catch(Exception ex){
 			throw new RuntimeException(ex);
 		}
+	}
+
+	@Override
+	public List<MemberVO> selectMemberInfo(String id) {
+		return memberDAO.selectMemberInfo(id);
 	}
 	
 }

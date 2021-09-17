@@ -16,6 +16,8 @@ public interface FeedDAO {
   public List<FeedVO> getMoreFeeds(Map<String, String> map);
 
   public int updateFeedLike(Map<String, String> map);
+  
+  public List<FeedVO> getMemberFeeds(Map<String, String>map);
 
   public List<ReplyVO> selectFeedReplys(int feedId);
 }

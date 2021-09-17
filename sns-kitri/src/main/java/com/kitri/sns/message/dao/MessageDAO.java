@@ -8,6 +8,7 @@ import com.kitri.sns.message.vo.MemberVO;
 import com.kitri.sns.message.vo.MessageVO;
 
 public interface MessageDAO {
+
    public List<MessageVO> selectMsgList(String senderId);
    public List<MessageVO> selectMsgDetail(Map<String, String> map);
    public int updateMsg(Map<String, String> map);
