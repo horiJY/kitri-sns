@@ -22,4 +22,8 @@ public class PostImgService {
 		
 		return "업로드실패";
 	}
+	
+	public int memberFeedsCnt(String id) {
+		return postDao.memberFeedsCnt(id);
+	}
 }

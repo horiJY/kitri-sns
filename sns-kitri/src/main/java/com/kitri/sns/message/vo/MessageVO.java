@@ -7,6 +7,13 @@ public class MessageVO {
 	private String path;
 	private String lastMsg;
 	
+	
+	
+	@Override
+	public String toString() {
+		return "MessageVO [id1=" + id1 + ", id2=" + id2 + ", day=" + day + ", path=" + path + ", lastMsg=" + lastMsg
+				+ "]";
+	}
 	public String getId1() {
 		return id1;
 	}

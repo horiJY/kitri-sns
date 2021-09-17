@@ -70,8 +70,9 @@ local.properties
 
 ###Eclipse TomcatBuild###
 */target/
+*/target/*
 */target/**
-*/target*.*
+*/target/*.*
 
 ### Java ###
 # Compiled class file

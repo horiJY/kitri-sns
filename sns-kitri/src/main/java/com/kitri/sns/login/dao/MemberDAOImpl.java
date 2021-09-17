@@ -1,5 +1,7 @@
 package com.kitri.sns.login.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -26,8 +28,10 @@ public class MemberDAOImpl implements MemberDAO{
 	public int insertMember(MemberVO mvo) {
 		return sqlSession.insert("member.insertMember",mvo);
 	}
-	
-	
-	
-	
+
+	@Override
+	public List<MemberVO> selectMemberInfo(String id) {
+		return sqlSession.selectList("member.selectMemberInfo", id);
+	}
+
 }
