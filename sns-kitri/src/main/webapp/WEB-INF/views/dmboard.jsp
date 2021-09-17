@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="header.jsp"%>
     <style>
 body {
@@ -421,21 +422,12 @@ h3 {
 </style>
 <script>
     $(document).ready(function(){
-<<<<<<< HEAD
        $('.chat').hide();
       $('.leftsearchbar').hide(); 
       $('.leftdiscussion').show();
         
       //나의 id
          var myId = ${id};
-=======
-    	$('.chat').hide();
-		$('.leftsearchbar').hide(); 
-		$('.leftdiscussion').show();
-     	
-		//나의 id
-        var myId = "bn_sj2013";
->>>>>>> 1c01ffd9cf5ac841a930fa739413875fc1d90767
         $('.my-id').html;
         $('.my-id').append(myId);
         

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.kitri.sns.message.service.MessageService;
-import com.kitri.sns.message.vo.FollowVO;
+import com.kitri.sns.message.vo.MemberVO;
 import com.kitri.sns.message.vo.MessageDetailVO;
 import com.kitri.sns.message.vo.MessageVO;
 
@@ -142,7 +142,7 @@ public class DMController {
   @ResponseBody
   public String DMSearch(String memberId) {
 
-    List<FollowVO> followList = msgService.selectFollowList("jennierubyjane");
+    List<MemberVO> followList = msgService.selectFollowList(memberId);
     Gson gson = new Gson();
 
     return gson.toJson(followList);

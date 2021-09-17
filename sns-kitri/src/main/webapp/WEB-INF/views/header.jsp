@@ -102,7 +102,7 @@
 						window.location.href = "${path }/";
 					});
 					$("#directnav").on("click", function () {
-						window.location.href = "${path }/direct";
+						window.location.href = "${path }/message/list";
 					});
 					$("#notinav").on("click", function () {
 						if ($("#sub-notinav").css("display") == "none") {
