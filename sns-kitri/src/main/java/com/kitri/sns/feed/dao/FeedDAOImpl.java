@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.kitri.sns.feed.vo.FeedVO;
+import com.kitri.sns.feed.vo.ReplyVO;
 
 @Repository
 public class FeedDAOImpl implements FeedDAO {
@@ -42,4 +43,9 @@ public class FeedDAOImpl implements FeedDAO {
 	public List<FeedVO> getMemberFeeds(Map<String, String> map) {
 		return sqlSession.selectList("feed.selectMemberFeeds", map);
 	}
+
+  @Override
+  public List<ReplyVO> selectFeedReplys(int feedId) {
+    return sqlSession.selectList("feed.selectFeedReplys", feedId);
+  }
 }

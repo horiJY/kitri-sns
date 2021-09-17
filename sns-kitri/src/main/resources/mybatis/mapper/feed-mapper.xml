@@ -98,4 +98,10 @@
 	]]>
 	</select>
 	
+	<select id="selectFeedReplys" parameterType="int" resultType="replyVO">
+		select MEMBER_ID,SEQ_NO,REPLY,TO_CHAR(REG_DATE,'yy-MM-dd HH24:mi') reg_date
+		from feed_replys
+		where feed_id = #{feedId}
+		order by SEQ_NO desc
+	</select>
 </mapper>
