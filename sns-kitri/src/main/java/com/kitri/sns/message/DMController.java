@@ -70,7 +70,8 @@ public class DMController {
     // String receiverId = mvo.getId2();
     // String day = mvo.getDay();
     String path =
-        "C:\\Users\\kitri\\git\\kitri-sns\\sns-kitri\\src\\main\\webapp\\resources\\dmfile";
+//        "C:\\Users\\kitri\\git\\kitri-sns\\sns-kitri\\src\\main\\webapp\\resources\\dmfile";
+    	  "C:\\Users\\kitri\\Desktop\\kitri-sns\\sns-kitri\\src\\main\\webapp\\resources\\dmfile";
 
     String path1 = path + File.separator + senderId + "-" + receiverId + "-" + day + ".txt";
     String path2 = path + File.separator + receiverId + "-" + senderId + "-" + day + ".txt";
