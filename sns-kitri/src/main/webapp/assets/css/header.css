@@ -6,7 +6,7 @@ header {
 	border: 1px solid #aaa;
 	position: fixed;
 	width: 100%;
-	z-index: 9999;
+	z-index: 999;
 	top: 0;
 	left: 0;
 }
@@ -219,6 +219,7 @@ header {
 	max-height: 200px;
 	overflow-x: hidden;
 	border-radius: 4px;
+	z-index: 9999;
 }
 
 .ui-widget-content .ui-state-active {
@@ -311,4 +312,7 @@ header {
 
 #btnwrapper {
 	margin: 2%;
+}
+#logoimg, .iconnav, .sub-nav{
+	cursor: pointer;
 }
