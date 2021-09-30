@@ -47,10 +47,11 @@ public class FileUploadController {
 
       // 서버 실제 폴더받아온 피드 번호 추가(업로드 디렉터리)
       // req.getReaulPath는 eclipse tomcat경로로 잡히게 된다.
-      // String uploadPath = req.getRealPath("/image/members/")+ map.get("loginid") + "/" + feedid;
-      String uploadPath =
-          "C:/Users/kitri/Desktop/kitri-sns/sns-kitri/src/main/webapp/image/members/"
-              + map.get("loginid") + "/" + feedid;
+      String uploadPath = session.getServletContext().getRealPath("/image/members/")
+          + map.get("loginid") + "/" + feedid;
+      // String uploadPath =
+      // "C:/Users/kitri/Desktop/kitri-sns/sns-kitri/src/main/webapp/image/members/"
+      // + map.get("loginid") + "/" + feedid;
       File checkDirectory = new File(uploadPath);
       if (!checkDirectory.exists()) {
         checkDirectory.mkdirs();
@@ -58,6 +59,7 @@ public class FileUploadController {
         for (MultipartFile mf : fileList) {
           String originalFileName = mf.getOriginalFilename(); // 원본 파일명
           File saveFile = new File(uploadPath, System.currentTimeMillis() + "_" + originalFileName);
+          System.out.println("업로드 위치 :" + saveFile);
           try {
             mf.transferTo(saveFile);
           } catch (IllegalStateException e) {

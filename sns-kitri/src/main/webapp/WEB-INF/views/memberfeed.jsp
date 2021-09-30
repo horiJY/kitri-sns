@@ -1,63 +1,65 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
 <style>
 body {
 	margin: 0px auto;
 	max-width: 1200px;
 }
-#infowrapper{
-   margin: auto;
-   width: 95%;
-   max-width: 935px;
-   height:25%;
-   max-height: 150px;
-   margin-top: 50px;
-   display: flex;
-   align-items: center;
-    justify-content: center;
+
+#infowrapper {
+	margin: auto;
+	width: 95%;
+	max-width: 935px;
+	height: 25%;
+	max-height: 150px;
+	margin-top: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-#memberbigthumnail{
-	width:40%;
-	max-width:150px;
+#memberbigthumnail {
+	width: 40%;
+	max-width: 150px;
 	height: 100%;
 	max-width: 150px;
-    margin-right: 10%;
+	margin-right: 10%;
 }
+
 #memberbigthumnail>img {
-   border-radius: 50%;
+	border-radius: 50%;
 }
 
-#memberinfowrapper{
-    width: 33%;
+#memberinfowrapper {
+	width: 33%;
 }
 
-#infomemberid{
+#infomemberid {
 	font-size: xx-large;
-    font-weight: 100;
+	font-weight: 100;
 }
 
-#cntwrapper{
+#cntwrapper {
 	width: 100%;
-    height: 100%;
-    justify-content: space-between;
-    display: flex;
-    font-size: medium;
-    font-weight: 600;
-    margin-top: 5%;
-    margin-bottom: 5%;
+	height: 100%;
+	justify-content: space-between;
+	display: flex;
+	font-size: medium;
+	font-weight: 600;
+	margin-top: 5%;
+	margin-bottom: 5%;
 }
 
-#name{
-    font-weight: bold;
+#name {
+	font-weight: bold;
 }
 
-#introduce{
-	width:100%;
-	height:auto;
+#introduce {
+	width: 100%;
+	height: auto;
 	margin-top: 5%;
 }
-
 
 #feedList {
 	margin: auto;
@@ -113,22 +115,28 @@ img {
 	height: 100%;
 }
 
-#likes{
+#likes {
 	font-size: small;
-	margin-left:10px;
+	margin-left: 10px;
 	display: flex;
 }
 
-.likebtn{
-	margin-right:10px;
-	width:20px;
-	height:20px;
+.likebtn {
+	margin-right: 10px;
+	width: 20px;
+	height: 20px;
 }
 
 #feedcontent {
 	margin: 10px;
 	height: 100px;
-    overflow-x: auto;
+	overflow-x: auto;
+}
+
+#replybox {
+	margin: 10px;
+	max-height: 120px;
+	overflow-x: auto;
 }
 
 #regdate {
@@ -136,6 +144,45 @@ img {
 	margin-bottom: 10px;
 	font-size: small;
 	color: gray;
+}
+
+.replyline {
+	display: flex;
+}
+
+.replymemberid {
+	margin-left: 1%;
+	width: fit-content;
+	font-weight: 600;
+}
+
+.replycontent {
+	width: 55%;
+	margin-left: 2%;
+}
+
+.replydate {
+	font-size: xx-small;
+	font-weight: 900;
+	margin-left: auto;
+}
+
+#replytextwrapper {
+	width: 100%;
+	height: 21px;
+	display: flex;
+}
+
+#pushreply {
+	background-image: url("http://localhost:8080/sns/image/icon/edit.png");
+	width: 20px;
+	height: 100%;
+	background-size: cover;
+}
+
+#inputreply {
+	height: 16px;
+	width: 94.5%;
 }
 
 #morelist {
@@ -147,9 +194,11 @@ img {
 </style>
 
 <div>
-<%-- 	<c:set value="${infoList}" var="infoList" /> --%>
+	<%-- 	<c:set value="${infoList}" var="infoList" /> --%>
 	<div id="infowrapper">
-		<div id="memberbigthumnail"><img src="${path}/image/members/${infoList.memberId}/thumnail.jpg"></div>
+		<div id="memberbigthumnail">
+			<img src="${path}/image/members/${infoList.memberId}/thumnail.jpg">
+		</div>
 		<div id="memberinfowrapper">
 			<div id="infomemberid">${infoList.memberId }</div>
 			<div id="cntwrapper">
@@ -184,70 +233,81 @@ img {
 				</c:forEach>
 			</div>
 			<div id="likes">
-				<img class="likebtn" src="${path}/image/icon/noti.png"/>
-				좋아요 ${feedvo.likes } 개
+				<img class="likebtn" src="${path}/image/icon/noti.png" /> 좋아요
+				${feedvo.likes } 개
 			</div>
 			<div id="feedcontent">${feedvo.content }</div>
-
 			<div id="regdate">${feedvo.regdate}</div>
+			<div id="replybox">
+				<c:forEach items="${feedvo.replys }" var="replys">
+					<div class="replyline">
+						<div class="replymemberid">${replys.member_Id }</div>
+						<div class="replycontent">${replys.reply }</div>
+						<div class="replydate">${replys.reg_date }</div>
+					</div>
+				</c:forEach>
+			</div>
+			<div id="replytextwrapper">
+				<div id="pushreply"></div>
+				<input id="inputreply" type="text" />
+			</div>
 		</div>
 	</c:forEach>
-	<div id="morefeedwrapper">
-	</div>
+	<div id="morefeedwrapper"></div>
 </div>
 
 
 
 <!-- <div id="morelist">더 보기</div> -->
 <script>
-// 	$(document).ready(function() {
-// 		$("#morelist").on("click", function() {
-// 			let start = $("#morefeedwrapper").length;
-// 			let end = start + 8;
+	// 	$(document).ready(function() {
+	// 		$("#morelist").on("click", function() {
+	// 			let start = $("#morefeedwrapper").length;
+	// 			let end = start + 8;
 
-// 				$.ajax({
-// 					url:"${path}/morefeedlist",
-// 					type:"post",
-// 					data:{"start":start,"end":end},
-// 					dataType:"json",
-// 					success:function(data){
-// 					console.log(data);
-// 					if(data.length < 9){
-// 						$("#morelist").remove();
-// 					}
+	// 				$.ajax({
+	// 					url:"${path}/morefeedlist",
+	// 					type:"post",
+	// 					data:{"start":start,"end":end},
+	// 					dataType:"json",
+	// 					success:function(data){
+	// 					console.log(data);
+	// 					if(data.length < 9){
+	// 						$("#morelist").remove();
+	// 					}
 
-// 					if(data.length>0){
-// 						let morefeedlist = "";
-// 						for(let i=0; i < data.length; i++){
-// 							morefeedlist += "<div class='feedwrapper'>"
-// 										+"<input type='hidden' id='feedid' value='"+data[i].feedId+"'/>"
-// 										+"<div id='memberid'>"
-// 										+"<div class='memberthumnail'>"
-// 										+"<img src='${path}/image/members/"+data[i].memberId+"/thumnail.jpg' />"
-// 										+"</div>"
-// 										+data[i].memberId
-// 										+"</div>"
-// 										+"<div id='imgListWrapper'>";
-// 										for(let j=0; j<data[i].imageURL.split(',').length; j++){
-// 											morefeedlist += "<img class='feedimgbox' src='${path}/image/members/"+data[i].memberId+"/"+data[i].feedId+"/"+data[0].imageURL.split(',')[j]+"'>"; 
-// 										}
-// 							morefeedlist += "</div>"
-// 										+"    <div id='likes'> 좋아요 "+data[i].likes+"개</div>"
-// 										+"    <div id='feedcontent'>"+data[i].content+"</div>"
-// 										+"    <div id='regdate'>"+data[i].regdate+"</div>"
-// 										+"</div>";
-// 						}
-// 						$("#morefeedwrapper").append(morefeedlist).trigger("create");
-// 					}
-// 				},
-// 				error:function(request,status,error){
-// 					console.log("code:"+request.status);
-// 					console.log("message:"+request.responseText);
-// 					console.log("error:"+error);
-// 				}
-// 			});
-// 		});
-// 	});
+	// 					if(data.length>0){
+	// 						let morefeedlist = "";
+	// 						for(let i=0; i < data.length; i++){
+	// 							morefeedlist += "<div class='feedwrapper'>"
+	// 										+"<input type='hidden' id='feedid' value='"+data[i].feedId+"'/>"
+	// 										+"<div id='memberid'>"
+	// 										+"<div class='memberthumnail'>"
+	// 										+"<img src='${path}/image/members/"+data[i].memberId+"/thumnail.jpg' />"
+	// 										+"</div>"
+	// 										+data[i].memberId
+	// 										+"</div>"
+	// 										+"<div id='imgListWrapper'>";
+	// 										for(let j=0; j<data[i].imageURL.split(',').length; j++){
+	// 											morefeedlist += "<img class='feedimgbox' src='${path}/image/members/"+data[i].memberId+"/"+data[i].feedId+"/"+data[0].imageURL.split(',')[j]+"'>"; 
+	// 										}
+	// 							morefeedlist += "</div>"
+	// 										+"    <div id='likes'> 좋아요 "+data[i].likes+"개</div>"
+	// 										+"    <div id='feedcontent'>"+data[i].content+"</div>"
+	// 										+"    <div id='regdate'>"+data[i].regdate+"</div>"
+	// 										+"</div>";
+	// 						}
+	// 						$("#morefeedwrapper").append(morefeedlist).trigger("create");
+	// 					}
+	// 				},
+	// 				error:function(request,status,error){
+	// 					console.log("code:"+request.status);
+	// 					console.log("message:"+request.responseText);
+	// 					console.log("error:"+error);
+	// 				}
+	// 			});
+	// 		});
+	// 	});
 </script>
 </body>
 </html>

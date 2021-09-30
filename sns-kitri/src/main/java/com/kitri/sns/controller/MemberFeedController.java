@@ -37,6 +37,9 @@ public class MemberFeedController {
     map.put("id", id);
 
     List<FeedVO> feedList = feedService.getMemberDetailFeeds(map);
+    for (FeedVO c : feedList) {
+      c.setReplys(feedService.getFeedReplys(c.getFeedId()));
+    }
 
     List<MemberVO> memberInfo = memberService.selectMemberInfo(id);
 
