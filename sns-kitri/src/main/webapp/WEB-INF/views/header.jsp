@@ -15,7 +15,7 @@
 		</head>
 
 		<body>
-			<% String id=(String)session.getAttribute("id");%>
+			<% String id=(String)session.getAttribute("id"); %>
 				<header>
 					<div class="centerize_wrapper">
 						<form id="header-main-nav">
@@ -48,7 +48,7 @@
 								<div class="sub-nav-box" id="sub-usernav-box">
 									<ul class="sub-usernav">
 										<li id="profile-li"><i class="far fa-user-circle"
-												aria-hidden="true" ></i><span>${id }</span></li>
+												aria-hidden="true"></i><span>${id }</span></li>
 										<li id="logout-li"><span>로그아웃</span></li>
 									</ul>
 								</div>
@@ -57,44 +57,91 @@
 					</div>
 				</header>
 				<script type="text/javascript">
-					$.ajax({
-						type: 'get',
-						url: '${path }/searchuser',
-						dataType: 'json',
-						success: function (data) {
-							var usersource = new Array();
-							$.each(data, function (idx, obj) {
-								var user = new Object();
-								user.value = obj.id;
-								user.name = obj.name;
-								usersource.push(user);
-							});
-							$("#search").autocomplete({
-								minLength: 1,
-								source: usersource,
-								focus: function (event, ui) {
-									$("#search").val(ui.item.value);
-									return false;
-								},
-								autofocus: true,
-								select: function (event, ui) {
-									var pickmember = $("#search").val(ui.item.value).val();
-									window.location.href = '${path}/detail/'+pickmember;
-									return false;
-								},
-								position: { my: 'right top', at: 'right bottom' },
-								disable: false, // 해당 값 true 시, 자동완성 기능 꺼짐
-							}).autocomplete("instance")._renderItem = function (ul, item) {
-									return $("<li class='searchlist'>")
-										.append("<div class='searchitem'>"
-											+ "<img src='${path}/image/members/" + item.value + "/thumnail.jpg'>"
-											+ "<div class='user'><span class='searchid'>" + item.value + "</span><br>"
-											+ "<span class='searchname'>" + item.name + "</span><div>"
-											+ "</div>")
-										.appendTo(ul);
+					function autocompleteMember(input){
+						$.ajax({
+							type: 'get',
+							url: '${path }/searchuser',
+							dataType: 'json',
+							success: function (data) {
+								var usersource = new Array();
+								$.each(data, function (idx, obj) {
+									var user = new Object();
+									user.value = obj.id;
+									user.name = obj.name;
+									usersource.push(user);
+								});
+								$(input).autocomplete({
+									minLength: 1,
+									source: usersource,
+									focus: function (event, ui) {
+										$(input).val(ui.item.value);
+										return false;
+									},
+									autofocus: true,
+									select: function (event, ui) {
+										var pickmember = $(input).val(ui.item.value).val();
+										window.location.href = '${path}/detail/'+pickmember;
+										return false;
+									},
+									position: { my: 'right top', at: 'right bottom' },
+									disable: false, // 해당 값 true 시, 자동완성 기능 꺼짐
+								}).autocomplete("instance")._renderItem = function (ul, item) {
+										return $("<li class='searchlist'>")
+											.append("<div class='searchitem'>"
+												+ "<img src='${path}/image/members/" + item.value + "/thumnail.jpg'>"
+												+ "<div class='user'><span class='searchid'>" + item.value + "</span><br>"
+												+ "<span class='searchname'>" + item.name + "</span><div>"
+												+ "</div>")
+											.appendTo(ul);
 								};
-						}
-					});
+							}
+						});
+						
+					};
+					
+					function tagMember(input){
+						$.ajax({
+							type: 'get',
+							url: '${path }/searchuser',
+							dataType: 'json',
+							success: function (data) {
+								var usersource = new Array();
+								$.each(data, function (idx, obj) {
+									var user = new Object();
+									user.value = obj.id;
+									user.name = obj.name;
+									usersource.push(user);
+								});
+								$(input).autocomplete({
+									minLength: 0,
+									source: usersource,
+									focus: function (event, ui) {
+										$(input).val(ui.item.value);
+										return false;
+									},
+									autofocus: true,
+									select: function (event, ui) {
+										var pickmember = $(input).val(ui.item.value).val();
+										window.location.href = '${path}/detail/'+pickmember;
+										return false;
+									},
+									position: { my: 'right top', at: 'right bottom' },
+									disable: false, // 해당 값 true 시, 자동완성 기능 꺼짐
+								}).autocomplete("instance")._renderItem = function (ul, item) {
+										return $("<li class='searchlist'>")
+											.append("<div class='searchitem'>"
+												+ "<img src='${path}/image/members/" + item.value + "/thumnail.jpg'>"
+												+ "<div class='user'><span class='searchid'>" + item.value + "</span><br>"
+												+ "<span class='searchname'>" + item.name + "</span><div>"
+												+ "</div>")
+											.appendTo(ul);
+									};
+							}
+						});
+						
+					};
+					
+					autocompleteMember("#search");
 
 					$("#logoimg").on("click", function () {
 						window.location.href = "${path }/";
@@ -103,7 +150,7 @@
 						window.location.href = "${path }/";
 					});
 					$("#directnav").on("click", function () {
-						window.location.href = "${path }/message/list";
+						window.location.href = "${path }/direct";
 					});
 					$("#notinav").on("click", function () {
 						if ($("#sub-notinav").css("display") == "none") {
@@ -124,16 +171,14 @@
 					});
 
 					$("#profile-li").on("click", function () {
-
+						window.location.href = '${path}/detail/${ id}' ;
 					});
 					$("#logout-li").on("click", function () {
 						window.location.href = "${path }/login/logout";
 					});
 				</script>
-
 				
-		<!-- 모달창 -->  
-	<div id="modal-wrapper"> 
+				<div id="modal-wrapper"> 
 		<div id="modal-box">
 		<div id="modal-cancle-btn">X</div> 
 			<form action="${path }/fileupload" method="post" enctype="multipart/form-data" id="form">
